@@ -20,9 +20,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y pandoc
 
-      - name: Convert DOCX → HTML
+      - name: Convert DOCX → HTML (Body Fragments)
         run: |
           set -e
+          # We convert to "html" but without a standalone header so we get just the content body
           find content -name "*.docx" | while read docx_file; do
             html_file="${docx_file/content\//generated/}"
             html_file="${html_file%.docx}.html"
@@ -39,190 +40,121 @@ jobs:
             echo "Converted: $docx_file -> $html_file"
           done
 
-      - name: Generate manifest and shell pages
+      - name: Generate Manifest and Injected Pages
         run: |
           set -e
           python3 <<'PYEOF'
           import os, json
 
-          # helpers
           def to_title(s):
-              return s.replace('-', ' ').replace('_', ' ')
+              return s.replace('-', ' ').replace('_', ' ').capitalize()
 
-          def read_meta(folder):
-              meta = {}
-              p = os.path.join(folder, '_meta.txt')
-
-              if os.path.exists(p):
-                  with open(p, encoding="utf-8") as f:
-                      for line in f:
-                          if ':' in line:
-                              k, v = line.split(':', 1)
-                              meta[k.strip()] = v.strip()
-
-              return meta
-
-
-          def write_if_missing(path, content):
-              if not os.path.exists(path):
-                  os.makedirs(os.path.dirname(path), exist_ok=True)
-
-                  with open(path, "w", encoding="utf-8") as f:
-                      f.write(content)
-
-                  print("Created:", path)
-
-
+          # --- STYLING & TEMPLATE ---
+          # This CSS mimics a clean "Poetry" or "Index" style: centered, serif, readable.
           SHARED_CSS = """
-          body { font-family: sans-serif; margin:0; padding:2rem; }
-          h1 { font-size:1.8rem; }
+          :root { --text: #2d3436; --bg: #fdfdfd; --accent: #0984e3; }
+          body { 
+              font-family: "Georgia", serif; 
+              line-height: 1.6; 
+              color: var(--text); 
+              background: var(--bg); 
+              margin: 0; padding: 0; 
+          }
+          .container { max-width: 800px; margin: 4rem auto; padding: 0 2rem; }
+          header { border-bottom: 1px solid #eee; margin-bottom: 2rem; padding-bottom: 1rem; }
+          h1 { font-size: 2.5rem; color: #111; margin-bottom: 0.5rem; }
+          nav { margin-bottom: 2rem; font-family: sans-serif; font-size: 0.9rem; }
+          nav a { color: var(--accent); text-decoration: none; }
+          nav a:hover { text-decoration: underline; }
+          .content { font-size: 1.15rem; }
+          .content p { margin-bottom: 1.5rem; }
+          footer { margin-top: 4rem; font-size: 0.8rem; color: #999; border-top: 1px solid #eee; padding-top: 1rem; }
           """
 
-
-          SHARED_HEAD = f"""
-          <!DOCTYPE html>
+          def wrap_in_template(title, body_content, nav_path="../../index.html"):
+              return f"""<!DOCTYPE html>
           <html>
           <head>
               <meta charset="utf-8"/>
-              <title>Astatyr</title>
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <title>{title} | Astatyr</title>
               <style>{SHARED_CSS}</style>
           </head>
           <body>
-          """
-
-
-          SHARED_FOOT = """
+              <div class="container">
+                  <nav><a href="{nav_path}">← Back to Worldbuilding</a></nav>
+                  <header>
+                      <h1>{title}</h1>
+                  </header>
+                  <article class="content">
+                      {body_content}
+                  </article>
+                  <footer>Generated automatically from Word Document.</footer>
+              </div>
           </body>
-          </html>
-          """
+          </html>"""
 
+          manifest = {"storylines": [], "characters": [], "geography": []}
 
-          def make_basic_page(title):
-              return SHARED_HEAD + f"<h1>{title}</h1>" + SHARED_FOOT
+          # 1. SCAN CONTENT FOR MANIFEST
+          for category in ["storylines", "characters", "geography"]:
+              root = f"content/{category}"
+              if not os.path.exists(root): continue
+              
+              if category == "storylines":
+                  for sl in sorted(os.listdir(root)):
+                      path = os.path.join(root, sl)
+                      if os.path.isdir(path):
+                          chapters = [{"id": f[:-5], "title": to_title(f[:-5])} 
+                                     for f in sorted(os.listdir(path)) if f.endswith(".docx")]
+                          manifest["storylines"].append({"id": sl, "title": to_title(sl), "chapters": chapters})
+              else:
+                  for f in sorted(os.listdir(root)):
+                      if f.endswith(".docx"):
+                          item_id = f[:-5]
+                          manifest[category].append({"id": item_id, "title": to_title(item_id)})
 
+          # 2. WRITE FINAL STYLED PAGES
+          # Process Storylines
+          for sl in manifest["storylines"]:
+              for ch in sl["chapters"]:
+                  source_path = f"generated/storylines/{sl['id']}/{ch['id']}.html"
+                  if os.path.exists(source_path):
+                      with open(source_path, "r", encoding="utf-8") as f:
+                          content = f.read()
+                      
+                      out_path = f"worldbuilding/storylines/{sl['id']}/{ch['id']}.html"
+                      os.makedirs(os.path.dirname(out_path), exist_ok=True)
+                      with open(out_path, "w", encoding="utf-8") as f:
+                          f.write(wrap_in_template(ch["title"], content, nav_path="../../index.html"))
 
-          manifest = {
-              "storylines": [],
-              "characters": [],
-              "geography": []
-          }
+          # Process Characters & Geography
+          for category in ["characters", "geography"]:
+              for item in manifest[category]:
+                  source_path = f"generated/{category}/{item['id']}.html"
+                  if os.path.exists(source_path):
+                      with open(source_path, "r", encoding="utf-8") as f:
+                          content = f.read()
+                      
+                      out_path = f"worldbuilding/{category}/{item['id']}.html"
+                      os.makedirs(os.path.dirname(out_path), exist_ok=True)
+                      with open(out_path, "w", encoding="utf-8") as f:
+                          f.write(wrap_in_template(item["title"], content, nav_path="../index.html"))
 
-
-          # STORYLINES
-          root = "content/storylines"
-
-          if os.path.exists(root):
-              for sl in sorted(os.listdir(root)):
-                  path = os.path.join(root, sl)
-
-                  if not os.path.isdir(path):
-                      continue
-
-                  meta = read_meta(path)
-
-                  chapters = []
-
-                  for f in sorted(os.listdir(path)):
-                      if f.endswith(".docx") and f != "index.docx":
-                          chapters.append({
-                              "id": f[:-5],
-                              "title": to_title(f[:-5])
-                          })
-
-                  manifest["storylines"].append({
-                      "id": sl,
-                      "title": meta.get("title", to_title(sl)),
-                      "chapters": chapters
-                  })
-
-
-          # CHARACTERS
-          root = "content/characters"
-
-          if os.path.exists(root):
-              for f in sorted(os.listdir(root)):
-
-                  if not f.endswith(".docx"):
-                      continue
-
-                  char_id = f[:-5]
-
-                  manifest["characters"].append({
-                      "id": char_id,
-                      "title": to_title(char_id)
-                  })
-
-
-          # GEOGRAPHY
-          root = "content/geography"
-
-          if os.path.exists(root):
-              for g in sorted(os.listdir(root)):
-
-                  path = os.path.join(root, g)
-
-                  if not os.path.isdir(path):
-                      continue
-
-                  manifest["geography"].append({
-                      "id": g,
-                      "title": to_title(g)
-                  })
-
-
+          # Save Manifest
           os.makedirs("generated", exist_ok=True)
-
           with open("generated/manifest.json", "w", encoding="utf-8") as f:
               json.dump(manifest, f, indent=2)
 
-          print("Manifest written")
-
-
-          # create shell pages
-
-          for sl in manifest["storylines"]:
-
-              base = f"worldbuilding/storylines/{sl['id']}"
-
-              write_if_missing(
-                  f"{base}/index.html",
-                  make_basic_page(sl["title"])
-              )
-
-              for ch in sl["chapters"]:
-                  write_if_missing(
-                      f"{base}/{ch['id']}.html",
-                      make_basic_page(ch["title"])
-                  )
-
-
-          for ch in manifest["characters"]:
-              write_if_missing(
-                  f"worldbuilding/characters/{ch['id']}.html",
-                  make_basic_page(ch["title"])
-              )
-
-
-          for geo in manifest["geography"]:
-              write_if_missing(
-                  f"worldbuilding/geography/{geo['id']}/index.html",
-                  make_basic_page(geo["title"])
-              )
-
-
-          print("Done.")
+          print("Successfully injected content into styled templates.")
           PYEOF
-
 
       - name: Commit generated files
         run: |
           set -e
-
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-
           git add generated worldbuilding || true
-
           if git diff --cached --quiet; then
             echo "No changes"
           else
