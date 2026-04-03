@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ★ UPDATE: Location name -->
+  <title>Location Name — Astatyr</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --white: #ffffff; --off-white: #f7f6f3; --ink: #1a1a1a; --muted: #888; --border: #e4e2dc; --nav-w: 220px; --hover-bg: #f0ede6; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); display: flex; min-height: 100vh; }
+    nav { position: fixed; top: 0; left: 0; width: var(--nav-w); height: 100vh; background: var(--off-white); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 2.5rem 1.5rem; gap: 0.4rem; z-index: 100; overflow-y: auto; }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); line-height: 1.2; text-decoration: none; display: block; }
+    .nav-logo span { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.3rem; }
+    .nav-btn { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.8rem; border-radius: 8px; text-decoration: none; color: var(--muted); font-size: 0.82rem; font-weight: 400; transition: background 0.18s, color 0.18s; border: none; background: transparent; width: 100%; text-align: left; }
+    .nav-btn .icon { font-size: 1rem; }
+    .nav-btn:hover, .nav-btn.active { background: var(--hover-bg); color: var(--ink); }
+    .nav-divider { height: 1px; background: var(--border); margin: 0.8rem 0; }
+    .nav-section-label { font-size: 0.63rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #ccc; padding: 0.3rem 0.8rem; }
+    .nav-sub-btn { font-size: 0.77rem; padding-left: 1.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nav-footer { margin-top: auto; font-size: 0.7rem; color: var(--muted); padding-top: 1rem; }
+
+    main { margin-left: var(--nav-w); flex: 1; padding: 0; max-width: 900px; }
+
+    /* Hero image banner */
+    .loc-banner {
+      width: 100%; height: 280px;
+      background-color: var(--off-white); background-size: cover; background-position: center;
+      position: relative;
+    }
+    /* ★ UPDATE: Add style="background-image: url('/assets/images/geography/name.jpg')" when ready */
+    .loc-banner .banner-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,26,26,0.5) 0%, transparent 60%);
+    }
+    .loc-banner .banner-title {
+      position: absolute; bottom: 2rem; left: 4rem;
+      color: #fff;
+    }
+    .loc-banner .banner-title .loc-type {
+      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+      opacity: 0.8; margin-bottom: 0.3rem;
+    }
+    .loc-banner .banner-title h1 {
+      font-family: 'DM Serif Display', serif; font-size: 2.4rem; letter-spacing: -0.03em; line-height: 1.1;
+    }
+
+    .content-area { padding: 3rem 4rem 4rem; }
+
+    .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--muted); text-decoration: none; margin-bottom: 2rem; transition: color 0.15s; }
+    .back-link:hover { color: var(--ink); }
+
+    /* At-a-glance stat row */
+    .stat-row { display: flex; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+    .stat-item { display: flex; flex-direction: column; gap: 0.2rem; }
+    .stat-item .stat-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .stat-item .stat-value { font-size: 0.88rem; color: var(--ink); font-weight: 400; }
+
+    /* Image gallery (for maps, concept art, etc.) */
+    .image-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8rem; margin-bottom: 0.5rem; }
+    .gallery-img {
+      width: 100%; aspect-ratio: 4/3; border-radius: 8px;
+      background-color: var(--off-white); background-size: cover; background-position: center;
+      border: 1px solid var(--border);
+    }
+
+    /* Sections */
+    .section-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .wb-section { margin-bottom: 3rem; animation: fadeUp 0.5s ease both; }
+
+    /* Sub-location cards (cities within a country, etc.) */
+    .subloc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.8rem; }
+    .subloc-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; text-decoration: none; transition: box-shadow 0.2s, transform 0.2s; background: var(--white); display: block; }
+    .subloc-card:hover { box-shadow: 0 3px 16px rgba(0,0,0,0.07); transform: translateY(-2px); }
+    .subloc-card .subloc-img { width: 100%; aspect-ratio: 16/9; background-color: var(--off-white); background-size: cover; background-position: center; }
+    .subloc-card .subloc-info { padding: 0.7rem 0.9rem; }
+    .subloc-card .subloc-type { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .subloc-card .subloc-name { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--ink); }
+
+    /* Word doc content */
+    .doc-content h1, .doc-content h2 { font-family: 'DM Serif Display', serif; font-weight: 400; color: var(--ink); margin-bottom: 0.5rem; margin-top: 1.6rem; }
+    .doc-content h1 { font-size: 1.4rem; }
+    .doc-content h2 { font-size: 1.15rem; }
+    .doc-content h3 { font-size: 0.95rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; margin-top: 1.2rem; }
+    .doc-content p { font-size: 0.87rem; color: #3a3a3a; line-height: 1.85; font-weight: 300; margin-bottom: 0.8rem; }
+    .doc-content ul, .doc-content ol { padding-left: 1.4rem; margin-bottom: 0.8rem; }
+    .doc-content li { font-size: 0.87rem; color: #3a3a3a; line-height: 1.8; font-weight: 300; margin-bottom: 0.2rem; }
+    .doc-content strong { font-weight: 500; color: var(--ink); }
+    .doc-content em { font-style: italic; }
+    .doc-content > h1:first-child, .doc-content > h2:first-child { margin-top: 0; }
+    .loading { font-size: 0.82rem; color: var(--muted); font-style: italic; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) { nav { display: none; } main { margin-left: 0; } .loc-banner .banner-title { left: 1.5rem; } .content-area { padding: 2rem 1.5rem; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="/index.html">Astatyr<span>Hub Page</span></a>
+    <a class="nav-btn" href="/worldbuilding.html"><span class="icon">🌍</span> Worldbuilding</a>
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">Geography</div>
+    <!-- ★ UPDATE: one line per location, mark current with .active -->
+    <a class="nav-btn nav-sub-btn active" href="index.html">Country 1</a>
+    <a class="nav-btn nav-sub-btn" href="../country-2/index.html">Country 2</a>
+    <div class="nav-footer">© 2025 Justin Adrian Halim</div>
+  </nav>
+
+  <main>
+    <!-- Banner image + title overlay -->
+    <!-- ★ UPDATE: Add style="background-image: url('...')" to .loc-banner when ready -->
+    <div class="loc-banner">
+      <div class="banner-overlay"></div>
+      <div class="banner-title">
+        <div class="loc-type">Country</div> <!-- ★ UPDATE: Country / Region / City / etc. -->
+        <h1>Location Name</h1>             <!-- ★ UPDATE -->
+      </div>
+    </div>
+
+    <div class="content-area">
+      <a class="back-link" href="/worldbuilding.html">← Worldbuilding</a>
+
+      <!-- At-a-glance stats -->
+      <!-- ★ UPDATE: fill in or remove stats as needed -->
+      <div class="stat-row">
+        <div class="stat-item"><span class="stat-label">Climate</span><span class="stat-value">Temperate</span></div>
+        <div class="stat-item"><span class="stat-label">Population</span><span class="stat-value">???</span></div>
+        <div class="stat-item"><span class="stat-label">Capital</span><span class="stat-value">City Name</span></div>
+        <div class="stat-item"><span class="stat-label">Government</span><span class="stat-value">Monarchy</span></div>
+        <div class="stat-item"><span class="stat-label">Notable for</span><span class="stat-value">Something</span></div>
+      </div>
+
+      <!-- Overview (from Word doc) -->
+      <section class="wb-section" id="overview">
+        <div class="section-label">Overview</div>
+        <div id="overview-content" class="doc-content">
+          <p class="loading">Loading content…</p>
+        </div>
+      </section>
+
+      <!-- Map / images -->
+      <!-- ★ UPDATE: add background-image URLs for each gallery image -->
+      <section class="wb-section" id="gallery">
+        <div class="section-label">Maps & Images</div>
+        <div class="image-gallery">
+          <div class="gallery-img"></div>
+          <div class="gallery-img"></div>
+          <!-- Duplicate .gallery-img blocks to add more images -->
+        </div>
+      </section>
+
+      <!-- Sub-locations (cities, towns, dungeons within this country) -->
+      <!-- ★ UPDATE: add a .subloc-card for each city / location within -->
+      <section class="wb-section" id="locations">
+        <div class="section-label">Locations</div>
+        <div class="subloc-grid">
+          <a class="subloc-card" href="city-1.html">
+            <div class="subloc-img"></div>
+            <div class="subloc-info">
+              <div class="subloc-type">City</div>
+              <div class="subloc-name">City Name</div>
+            </div>
+          </a>
+          <a class="subloc-card" href="city-2.html">
+            <div class="subloc-img"></div>
+            <div class="subloc-info">
+              <div class="subloc-type">Town</div>
+              <div class="subloc-name">Town Name</div>
+            </div>
+          </a>
+          <!-- Duplicate above for each sub-location -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // ★ UPDATE: path matching this location's Word doc
+    // File goes in: content/geography/country-1/index.docx
+    const CONTENT_PATH = '/generated/geography/country-1/index.html';
+
+    async function loadContent() {
+      try {
+        const res = await fetch(CONTENT_PATH);
+        if (!res.ok) throw new Error('not found');
+        const html = await res.text();
+        document.getElementById('overview-content').innerHTML = html;
+      } catch {
+        document.getElementById('overview-content').innerHTML =
+          '<p style="color:#bbb;font-style:italic;font-size:0.82rem;">No content yet — add content/geography/country-1/index.docx to your repo.</p>';
+      }
+    }
+    loadContent();
+  </script>
+</body>
+</html>

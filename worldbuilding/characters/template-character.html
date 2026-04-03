@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ★ UPDATE: Character name -->
+  <title>Character Name — Astatyr</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --white: #ffffff; --off-white: #f7f6f3; --ink: #1a1a1a; --muted: #888; --border: #e4e2dc; --nav-w: 220px; --hover-bg: #f0ede6; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); display: flex; min-height: 100vh; }
+    nav { position: fixed; top: 0; left: 0; width: var(--nav-w); height: 100vh; background: var(--off-white); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 2.5rem 1.5rem; gap: 0.4rem; z-index: 100; overflow-y: auto; }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); line-height: 1.2; text-decoration: none; display: block; }
+    .nav-logo span { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.3rem; }
+    .nav-btn { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.8rem; border-radius: 8px; text-decoration: none; color: var(--muted); font-size: 0.82rem; font-weight: 400; transition: background 0.18s, color 0.18s; border: none; background: transparent; width: 100%; text-align: left; }
+    .nav-btn .icon { font-size: 1rem; }
+    .nav-btn:hover, .nav-btn.active { background: var(--hover-bg); color: var(--ink); }
+    .nav-divider { height: 1px; background: var(--border); margin: 0.8rem 0; }
+    .nav-section-label { font-size: 0.63rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #ccc; padding: 0.3rem 0.8rem; }
+    .nav-sub-btn { font-size: 0.77rem; padding-left: 1.8rem; }
+    .nav-footer { margin-top: auto; font-size: 0.7rem; color: var(--muted); padding-top: 1rem; }
+
+    main { margin-left: var(--nav-w); flex: 1; padding: 4rem 5rem; max-width: 860px; }
+
+    .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--muted); text-decoration: none; margin-bottom: 2rem; transition: color 0.15s; }
+    .back-link:hover { color: var(--ink); }
+
+    /* Character hero: portrait + quick stats side by side */
+    .char-hero { display: grid; grid-template-columns: 200px 1fr; gap: 2.5rem; margin-bottom: 3rem; align-items: start; animation: fadeUp 0.4s ease both; }
+    .char-portrait {
+      width: 200px; aspect-ratio: 3/4; border-radius: 12px;
+      background-color: var(--off-white); background-size: cover; background-position: center top;
+      border: 1px solid var(--border);
+    }
+    /* ★ UPDATE: When you have art, add to the div above:
+       style="background-image: url('/assets/images/characters/name.jpg')" */
+    .char-details h1 { font-family: 'DM Serif Display', serif; font-size: 2.2rem; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.3rem; }
+    .char-details .char-role { font-size: 0.82rem; color: var(--muted); font-weight: 300; margin-bottom: 1.2rem; }
+
+    /* Quick stat pills */
+    .stat-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.4rem; }
+    .stat-pill { font-size: 0.72rem; font-weight: 500; padding: 0.25rem 0.7rem; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.04em; }
+
+    /* Sections */
+    .section-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .wb-section { margin-bottom: 3rem; animation: fadeUp 0.5s ease both; }
+    .wb-section:nth-child(3) { animation-delay: 0.05s; }
+    .wb-section:nth-child(4) { animation-delay: 0.10s; }
+    .wb-section:nth-child(5) { animation-delay: 0.15s; }
+
+    /* Word doc content */
+    .doc-content h1, .doc-content h2 { font-family: 'DM Serif Display', serif; font-weight: 400; color: var(--ink); margin-bottom: 0.5rem; margin-top: 1.6rem; }
+    .doc-content h1 { font-size: 1.4rem; }
+    .doc-content h2 { font-size: 1.15rem; }
+    .doc-content h3 { font-size: 0.95rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; margin-top: 1.2rem; }
+    .doc-content p { font-size: 0.87rem; color: #3a3a3a; line-height: 1.85; font-weight: 300; margin-bottom: 0.8rem; }
+    .doc-content ul, .doc-content ol { padding-left: 1.4rem; margin-bottom: 0.8rem; }
+    .doc-content li { font-size: 0.87rem; color: #3a3a3a; line-height: 1.8; font-weight: 300; margin-bottom: 0.2rem; }
+    .doc-content strong { font-weight: 500; color: var(--ink); }
+    .doc-content em { font-style: italic; }
+    .doc-content blockquote { border-left: 2px solid var(--border); padding-left: 1.2rem; margin: 1rem 0; color: #666; font-style: italic; font-size: 0.9rem; }
+    .doc-content hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+    .doc-content > h1:first-child, .doc-content > h2:first-child { margin-top: 0; }
+    .loading { font-size: 0.82rem; color: var(--muted); font-style: italic; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) { nav { display: none; } main { margin-left: 0; padding: 2rem 1.5rem; } .char-hero { grid-template-columns: 1fr; } .char-portrait { width: 100%; aspect-ratio: 4/3; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="/index.html">Astatyr<span>Hub Page</span></a>
+    <a class="nav-btn" href="/worldbuilding.html"><span class="icon">🌍</span> Worldbuilding</a>
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">Characters</div>
+    <!-- ★ UPDATE: one line per character, mark current with .active -->
+    <a class="nav-btn nav-sub-btn active" href="character-1.html">Character 1</a>
+    <a class="nav-btn nav-sub-btn" href="character-2.html">Character 2</a>
+    <div class="nav-footer">© 2025 Justin Adrian Halim</div>
+  </nav>
+
+  <main>
+    <a class="back-link" href="/worldbuilding.html">← Worldbuilding</a>
+
+    <!-- Character portrait + quick info -->
+    <div class="char-hero">
+      <!-- ★ UPDATE: add style="background-image: url('...')" when art is ready -->
+      <div class="char-portrait"></div>
+      <div class="char-details">
+        <!-- ★ UPDATE: name, role, and stat pills -->
+        <h1>Character Name</h1>
+        <div class="char-role">Role · Affiliation</div>
+        <div class="stat-grid">
+          <span class="stat-pill">Race / Species</span>
+          <span class="stat-pill">Class</span>
+          <span class="stat-pill">Age: ??</span>
+          <span class="stat-pill">Alignment</span>
+          <!-- Add or remove pills as needed -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Backstory & details (loaded from Word doc) -->
+    <section class="wb-section" id="backstory">
+      <div class="section-label">Backstory</div>
+      <div id="backstory-content" class="doc-content">
+        <p class="loading">Loading content…</p>
+      </div>
+    </section>
+
+    <!-- Personality (loaded from Word doc) -->
+    <section class="wb-section" id="personality">
+      <div class="section-label">Personality & Traits</div>
+      <div id="personality-content" class="doc-content">
+        <p class="loading">Loading content…</p>
+      </div>
+    </section>
+
+    <!-- Relationships (loaded from Word doc) -->
+    <section class="wb-section" id="relationships">
+      <div class="section-label">Relationships</div>
+      <div id="relationships-content" class="doc-content">
+        <p class="loading">Loading content…</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ★ UPDATE: path matching this character's Word doc
+    // File goes in: content/characters/character-1.docx
+    // In the Word doc, use Heading 2 to separate sections:
+    //   ## Backstory
+    //   ## Personality & Traits
+    //   ## Relationships
+    const CONTENT_PATH = '/generated/characters/character-1.html';
+
+    async function loadContent() {
+      try {
+        const res = await fetch(CONTENT_PATH);
+        if (!res.ok) throw new Error('not found');
+        const fullHtml = await res.text();
+
+        // Parse the generated HTML
+        const parser = new DOMParser();
+        const doc = parser.parseFromString('<div>' + fullHtml + '</div>', 'text/html');
+        const root = doc.querySelector('div');
+
+        // Split by h2 headings into named sections
+        const sections = { backstory: [], personality: [], relationships: [] };
+        let current = null;
+
+        for (const node of root.childNodes) {
+          const tag = node.nodeName.toLowerCase();
+          if (tag === 'h2') {
+            const text = node.textContent.toLowerCase();
+            if (text.includes('backstory')) current = 'backstory';
+            else if (text.includes('personality') || text.includes('trait')) current = 'personality';
+            else if (text.includes('relationship')) current = 'relationships';
+            else current = null;
+            // Don't include the h2 itself — the section label handles that
+          } else if (current && node.nodeType === 1) {
+            sections[current].push(node.outerHTML);
+          }
+        }
+
+        const fallback = '<p style="color:#bbb;font-style:italic;font-size:0.82rem;">No content yet.</p>';
+        document.getElementById('backstory-content').innerHTML     = sections.backstory.join('')     || fallback;
+        document.getElementById('personality-content').innerHTML   = sections.personality.join('')   || fallback;
+        document.getElementById('relationships-content').innerHTML = sections.relationships.join('') || fallback;
+
+      } catch {
+        const msg = '<p style="color:#bbb;font-style:italic;font-size:0.82rem;">No content yet — add content/characters/character-1.docx to your repo.</p>';
+        ['backstory-content','personality-content','relationships-content'].forEach(id => {
+          document.getElementById(id).innerHTML = msg;
+        });
+      }
+    }
+    loadContent();
+  </script>
+</body>
+</html>

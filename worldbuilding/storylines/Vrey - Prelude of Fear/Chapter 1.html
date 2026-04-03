@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ★ UPDATE: Chapter name and campaign name -->
+  <title>Chapter 1 — DnD Campaign 1 — Astatyr</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --white: #ffffff; --off-white: #f7f6f3; --ink: #1a1a1a; --muted: #888; --border: #e4e2dc; --nav-w: 220px; --hover-bg: #f0ede6; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); display: flex; min-height: 100vh; }
+    nav { position: fixed; top: 0; left: 0; width: var(--nav-w); height: 100vh; background: var(--off-white); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 2.5rem 1.5rem; gap: 0.4rem; z-index: 100; overflow-y: auto; }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); line-height: 1.2; text-decoration: none; display: block; }
+    .nav-logo span { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.3rem; }
+    .nav-btn { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.8rem; border-radius: 8px; text-decoration: none; color: var(--muted); font-size: 0.82rem; font-weight: 400; transition: background 0.18s, color 0.18s; border: none; background: transparent; width: 100%; text-align: left; }
+    .nav-btn .icon { font-size: 1rem; }
+    .nav-btn:hover, .nav-btn.active { background: var(--hover-bg); color: var(--ink); }
+    .nav-divider { height: 1px; background: var(--border); margin: 0.8rem 0; }
+    .nav-section-label { font-size: 0.63rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #ccc; padding: 0.3rem 0.8rem; }
+    .nav-sub-btn { font-size: 0.77rem; padding-left: 1.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nav-footer { margin-top: auto; font-size: 0.7rem; color: var(--muted); padding-top: 1rem; }
+
+    main { margin-left: var(--nav-w); flex: 1; padding: 4rem 5rem; max-width: 760px; }
+
+    .page-header { margin-bottom: 2.5rem; animation: fadeUp 0.4s ease both; }
+    .breadcrumb { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--muted); margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .breadcrumb a:hover { color: var(--ink); }
+    .breadcrumb span { color: #ccc; }
+    .page-header .ch-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+    .page-header h1 { font-family: 'DM Serif Display', serif; font-size: 2.4rem; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.4rem; }
+    .page-header .ch-date { font-size: 0.75rem; color: var(--muted); font-weight: 300; }
+
+    /* Chapter nav (prev / next) */
+    .ch-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+    .ch-nav a { display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; padding: 0.8rem 1rem; border: 1px solid var(--border); border-radius: 10px; transition: background 0.15s; max-width: 48%; }
+    .ch-nav a:hover { background: var(--off-white); }
+    .ch-nav .dir { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .ch-nav .title { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--ink); }
+    .ch-nav .next { text-align: right; margin-left: auto; }
+
+    /* Word doc content styles */
+    .doc-content { animation: fadeUp 0.5s ease 0.1s both; }
+    .doc-content h1, .doc-content h2 { font-family: 'DM Serif Display', serif; font-weight: 400; color: var(--ink); margin-bottom: 0.6rem; margin-top: 2rem; }
+    .doc-content h1 { font-size: 1.5rem; }
+    .doc-content h2 { font-size: 1.25rem; }
+    .doc-content h3 { font-size: 1rem; font-weight: 500; color: var(--ink); margin-bottom: 0.4rem; margin-top: 1.5rem; }
+    .doc-content p { font-size: 0.9rem; color: #3a3a3a; line-height: 1.85; font-weight: 300; margin-bottom: 1rem; }
+    .doc-content ul, .doc-content ol { padding-left: 1.4rem; margin-bottom: 1rem; }
+    .doc-content li { font-size: 0.9rem; color: #3a3a3a; line-height: 1.85; font-weight: 300; margin-bottom: 0.3rem; }
+    .doc-content strong { font-weight: 500; color: var(--ink); }
+    .doc-content em { font-style: italic; }
+    .doc-content blockquote { border-left: 2px solid var(--border); padding-left: 1.2rem; margin: 1.2rem 0; color: #666; font-style: italic; }
+    .doc-content hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .doc-content table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.84rem; }
+    .doc-content th { font-weight: 500; text-align: left; padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); color: var(--ink); }
+    .doc-content td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); color: #444; font-weight: 300; }
+    .doc-content > h1:first-child, .doc-content > h2:first-child { margin-top: 0; }
+
+    .loading { font-size: 0.82rem; color: var(--muted); font-style: italic; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) { nav { display: none; } main { margin-left: 0; padding: 2rem 1.5rem; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="/index.html">Astatyr<span>Hub Page</span></a>
+    <a class="nav-btn" href="/worldbuilding.html"><span class="icon">🌍</span> Worldbuilding</a>
+    <div class="nav-divider"></div>
+    <!-- ★ UPDATE: href points to this storyline's index -->
+    <div class="nav-section-label">DnD Campaign 1</div>
+    <a class="nav-btn nav-sub-btn" href="index.html">Overview</a>
+    <!-- ★ UPDATE: One line per chapter. Mark current with class="active" -->
+    <a class="nav-btn nav-sub-btn active" href="chapter-1.html">Ch. 1 — Title</a>
+    <a class="nav-btn nav-sub-btn" href="chapter-2.html">Ch. 2 — Title</a>
+    <div class="nav-footer">© 2025 Justin Adrian Halim</div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <!-- ★ UPDATE: breadcrumb links -->
+      <div class="breadcrumb">
+        <a href="/worldbuilding.html">Worldbuilding</a>
+        <span>/</span>
+        <a href="index.html">DnD Campaign 1</a>
+        <span>/</span>
+        Chapter 1
+      </div>
+      <!-- ★ UPDATE: chapter number, title, date -->
+      <div class="ch-label">Chapter 1</div>
+      <h1>Chapter Title Here</h1>
+      <div class="ch-date">Session date or in-world date</div>
+    </div>
+
+    <!-- Content loaded from Word doc -->
+    <div id="chapter-content" class="doc-content">
+      <p class="loading">Loading content…</p>
+    </div>
+
+    <!-- Prev / Next navigation -->
+    <!-- ★ UPDATE: href and titles for adjacent chapters -->
+    <nav class="ch-nav">
+      <a href="index.html">
+        <span class="dir">← Previous</span>
+        <span class="title">Overview</span>
+      </a>
+      <a class="next" href="chapter-2.html">
+        <span class="dir">Next →</span>
+        <span class="title">Chapter 2 Title</span>
+      </a>
+    </nav>
+  </main>
+
+  <script>
+    // ★ UPDATE: path matching your content folder structure
+    // File goes in: content/storylines/dnd-campaign-1/chapter-1.docx
+    const CONTENT_PATH = '/generated/storylines/dnd-campaign-1/chapter-1.html';
+
+    async function loadContent() {
+      try {
+        const res = await fetch(CONTENT_PATH);
+        if (!res.ok) throw new Error('not found');
+        const html = await res.text();
+        document.getElementById('chapter-content').innerHTML = html;
+      } catch {
+        document.getElementById('chapter-content').innerHTML =
+          '<p style="color:#bbb;font-style:italic;font-size:0.82rem;">No content yet — add content/storylines/dnd-campaign-1/chapter-1.docx to your repo.</p>';
+      }
+    }
+    loadContent();
+  </script>
+</body>
+</html>

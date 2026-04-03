@@ -8,561 +8,230 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --white: #ffffff;
-      --off-white: #f7f6f3;
-      --ink: #1a1a1a;
-      --muted: #888;
-      --border: #e4e2dc;
-      --nav-w: 220px;
-      --hover-bg: #f0ede6;
+      --white: #ffffff; --off-white: #f7f6f3; --ink: #1a1a1a;
+      --muted: #888; --border: #e4e2dc; --nav-w: 220px; --hover-bg: #f0ede6;
     }
-
     html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--white);
-      color: var(--ink);
-      display: flex;
-      min-height: 100vh;
-    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); display: flex; min-height: 100vh; }
 
     /* ── SIDEBAR ── */
     nav {
-      position: fixed;
-      top: 0; left: 0;
-      width: var(--nav-w);
-      height: 100vh;
-      background: var(--off-white);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      padding: 2.5rem 1.5rem;
-      gap: 0.4rem;
-      z-index: 100;
-      overflow-y: auto;
+      position: fixed; top: 0; left: 0; width: var(--nav-w); height: 100vh;
+      background: var(--off-white); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; padding: 2.5rem 1.5rem; gap: 0.4rem; z-index: 100; overflow-y: auto;
     }
-
-    .nav-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.4rem;
-      letter-spacing: -0.02em;
-      color: var(--ink);
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border);
-      line-height: 1.2;
-      text-decoration: none;
-      display: block;
-      flex-shrink: 0;
-    }
-
-    .nav-logo span {
-      display: block;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 300;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-top: 0.3rem;
-    }
-
-    .nav-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.55rem 0.8rem;
-      border-radius: 8px;
-      text-decoration: none;
-      color: var(--muted);
-      font-size: 0.82rem;
-      font-weight: 400;
-      transition: background 0.18s ease, color 0.18s ease;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      width: 100%;
-      text-align: left;
-      flex-shrink: 0;
-    }
-
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); line-height: 1.2; text-decoration: none; display: block; }
+    .nav-logo span { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.3rem; }
+    .nav-btn { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.8rem; border-radius: 8px; text-decoration: none; color: var(--muted); font-size: 0.82rem; font-weight: 400; transition: background 0.18s ease, color 0.18s ease; border: none; background: transparent; width: 100%; text-align: left; }
     .nav-btn .icon { font-size: 1rem; flex-shrink: 0; }
     .nav-btn:hover, .nav-btn.active { background: var(--hover-bg); color: var(--ink); }
-
-    .nav-divider { height: 1px; background: var(--border); margin: 0.8rem 0; flex-shrink: 0; }
-
-    .nav-section-label {
-      font-size: 0.63rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #ccc;
-      padding: 0.3rem 0.8rem;
-      flex-shrink: 0;
-    }
-
-    .nav-sub-btn {
-      font-size: 0.77rem;
-      padding-left: 1.8rem;
-    }
-
-    .nav-footer {
-      margin-top: auto;
-      font-size: 0.7rem;
-      color: var(--muted);
-      padding-top: 1rem;
-      flex-shrink: 0;
-    }
+    .nav-divider { height: 1px; background: var(--border); margin: 0.8rem 0; }
+    .nav-section-label { font-size: 0.63rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #ccc; padding: 0.3rem 0.8rem; }
+    .nav-sub-btn { font-size: 0.77rem; padding-left: 1.8rem; }
+    .nav-footer { margin-top: auto; font-size: 0.7rem; color: var(--muted); padding-top: 1rem; }
 
     /* ── MAIN ── */
-    main {
-      margin-left: var(--nav-w);
-      flex: 1;
-      padding: 4rem 5rem;
-      max-width: 860px;
-    }
+    main { margin-left: var(--nav-w); flex: 1; padding: 4rem 5rem; max-width: 900px; }
 
-    /* ── PAGE HEADER ── */
-    .page-header {
-      margin-bottom: 3.5rem;
-      animation: fadeUp 0.4s ease both;
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.75rem;
-      color: var(--muted);
-      text-decoration: none;
-      margin-bottom: 1.5rem;
-      transition: color 0.15s;
-    }
-
+    .page-header { margin-bottom: 3.5rem; animation: fadeUp 0.4s ease both; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--muted); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.15s; }
     .back-link:hover { color: var(--ink); }
-
-    .page-header h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 2.8rem;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 0.6rem;
-    }
-
-    .page-header p {
-      font-size: 0.9rem;
-      color: var(--muted);
-      font-weight: 300;
-      line-height: 1.7;
-      max-width: 520px;
-    }
+    .page-header h1 { font-family: 'DM Serif Display', serif; font-size: 2.8rem; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.6rem; }
+    .page-header p { font-size: 0.9rem; color: var(--muted); font-weight: 300; line-height: 1.7; }
 
     /* ── SECTIONS ── */
-    .wb-section {
-      margin-bottom: 5rem;
-      animation: fadeUp 0.5s ease both;
-    }
-
+    .wb-section { margin-bottom: 4rem; animation: fadeUp 0.5s ease both; }
     .wb-section:nth-child(2) { animation-delay: 0.05s; }
     .wb-section:nth-child(3) { animation-delay: 0.10s; }
     .wb-section:nth-child(4) { animation-delay: 0.15s; }
     .wb-section:nth-child(5) { animation-delay: 0.20s; }
 
-    .section-label {
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1.6rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
+    .section-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.4rem; display: flex; align-items: center; gap: 0.6rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ── STORYLINE CARDS ── */
+    .storyline-card {
+      border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem;
+      margin-bottom: 1rem; transition: box-shadow 0.2s ease, transform 0.2s ease; background: var(--white);
     }
+    .storyline-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.07); transform: translateY(-2px); }
+    .storyline-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; font-weight: 400; color: var(--ink); margin-bottom: 0.3rem; }
+    .storyline-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; font-weight: 300; margin-bottom: 0.8rem; }
+    .card-meta { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .badge { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.06em; padding: 0.22rem 0.65rem; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); text-transform: uppercase; }
+    .btn-link { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; font-weight: 500; color: var(--ink); text-decoration: none; padding: 0.25rem 0.7rem; border: 1px solid var(--border); border-radius: 20px; transition: background 0.15s, border-color 0.15s; }
+    .btn-link:hover { background: var(--off-white); border-color: #ccc; }
 
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
+    /* ── CHARACTER GRID ── */
+    .char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+    .char-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; transition: box-shadow 0.2s ease, transform 0.2s ease; background: var(--white); display: block; }
+    .char-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .char-card .char-img { width: 100%; aspect-ratio: 3/4; background-color: var(--off-white); background-size: cover; background-position: center top; }
+    .char-card .char-info { padding: 0.8rem; }
+    .char-card .char-name { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--ink); margin-bottom: 0.15rem; }
+    .char-card .char-role { font-size: 0.72rem; color: var(--muted); font-weight: 300; }
 
-    /* ── LORE BLOCK (General / Storyline) ── */
-    /* Use one .lore-block per topic / chapter / entry */
-    .lore-block {
-      border-left: 2px solid var(--border);
-      padding: 0 0 0 1.4rem;
-      margin-bottom: 2rem;
-      transition: border-color 0.2s;
-    }
+    /* ── LOCATION GRID ── */
+    .loc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+    .loc-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; transition: box-shadow 0.2s ease, transform 0.2s ease; background: var(--white); display: block; }
+    .loc-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .loc-card .loc-img { width: 100%; aspect-ratio: 16/9; background-color: var(--off-white); background-size: cover; background-position: center; }
+    .loc-card .loc-info { padding: 1rem 1.1rem; }
+    .loc-card .loc-name { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); margin-bottom: 0.2rem; }
+    .loc-card .loc-type { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 
-    .lore-block:hover { border-color: var(--ink); }
+    /* ── COMING SOON ── */
+    .soon-card { border: 1px dashed var(--border); border-radius: 12px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; }
+    .soon-card h3 { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 1rem; color: #bbb; margin-bottom: 0.2rem; }
+    .soon-card p { font-size: 0.78rem; color: #ccc; font-weight: 300; }
 
-    .lore-block h3 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.15rem;
-      font-weight: 400;
-      color: var(--ink);
-      margin-bottom: 0.5rem;
-    }
-
-    .lore-block p {
-      font-size: 0.85rem;
-      color: #555;
-      line-height: 1.75;
-      font-weight: 300;
-    }
-
-    .lore-block .lore-tag {
-      display: inline-block;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.4rem;
-    }
-
-    /* ── CHARACTER CARDS ── */
-    /* Add one .character-card per character */
-    .character-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.2rem;
-    }
-
-    .character-card {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: box-shadow 0.2s ease, transform 0.2s ease;
-      background: var(--white);
-    }
-
-    .character-card:hover {
-      box-shadow: 0 6px 28px rgba(0,0,0,0.08);
-      transform: translateY(-3px);
-    }
-
-    /* The image area — swap the background-color for background-image when you have art */
-    .character-card .char-img {
-      width: 100%;
-      aspect-ratio: 3/4;
-      background-color: var(--off-white);
-      background-size: cover;
-      background-position: center top;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ccc;
-      font-size: 0.72rem;
-      letter-spacing: 0.06em;
-    }
-
-    .character-card .char-info {
-      padding: 0.9rem 1rem;
-    }
-
-    .character-card .char-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1rem;
-      font-weight: 400;
-      color: var(--ink);
-      margin-bottom: 0.2rem;
-    }
-
-    .character-card .char-role {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-weight: 300;
-      margin-bottom: 0.5rem;
-    }
-
-    .character-card .char-desc {
-      font-size: 0.75rem;
-      color: #777;
-      line-height: 1.6;
-      font-weight: 300;
-    }
-
-    /* ── GEOGRAPHY ── */
-    /* Add one .geo-entry per location */
-    .geo-entry {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 2.5rem;
-      align-items: start;
-    }
-
-    .geo-entry.flip { direction: rtl; }
-    .geo-entry.flip > * { direction: ltr; }
-
-    .geo-img {
-      width: 100%;
-      aspect-ratio: 4/3;
-      background-color: var(--off-white);
-      background-size: cover;
-      background-position: center;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ccc;
-      font-size: 0.72rem;
-      letter-spacing: 0.06em;
-    }
-
-    .geo-text h3 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.15rem;
-      font-weight: 400;
-      color: var(--ink);
-      margin-bottom: 0.5rem;
-    }
-
-    .geo-text .geo-type {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    .geo-text p {
-      font-size: 0.83rem;
-      color: #555;
-      line-height: 1.75;
-      font-weight: 300;
-    }
-
-    /* ── PLACEHOLDER ── */
-    .placeholder {
-      border: 1px dashed var(--border);
-      border-radius: 10px;
-      padding: 2rem;
-      text-align: center;
-      color: #ccc;
-      font-size: 0.8rem;
-      font-weight: 300;
-      font-style: italic;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 768px) {
-      nav { display: none; }
-      main { margin-left: 0; padding: 2rem 1.5rem; }
-      .page-header h1 { font-size: 2rem; }
-      .geo-entry { grid-template-columns: 1fr; }
-      .geo-entry.flip { direction: ltr; }
-    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) { nav { display: none; } main { margin-left: 0; padding: 2rem 1.5rem; } .page-header h1 { font-size: 2rem; } }
   </style>
 </head>
 <body>
 
-  <!-- ── SIDEBAR ── -->
   <nav>
-    <a class="nav-logo" href="index.html">
-      Astatyr
-      <span>Hub Page</span>
-    </a>
-
-    <!-- Main hub links -->
-    <a class="nav-btn" href="index.html#research"><span class="icon">🔍</span> Research</a>
-    <a class="nav-btn" href="index.html#code"><span class="icon">🧑‍💻</span> Code Projects</a>
-    <a class="nav-btn" href="index.html#engineering"><span class="icon">🧮</span> Engineering</a>
-    <a class="nav-btn" href="index.html#writing"><span class="icon">✍️</span> Writing</a>
-
+    <a class="nav-logo" href="/index.html">Astatyr<span>Hub Page</span></a>
+    <a class="nav-btn" href="/index.html#research"><span class="icon">🔍</span> Research</a>
+    <a class="nav-btn" href="/index.html#code"><span class="icon">🧑‍💻</span> Code</a>
+    <a class="nav-btn" href="/index.html#engineering"><span class="icon">🧮</span> Engineering</a>
     <div class="nav-divider"></div>
-
-    <!-- Worldbuilding sections -->
     <div class="nav-section-label">Worldbuilding</div>
-    <a class="nav-btn nav-sub-btn" href="#general">🌐 General</a>
-    <a class="nav-btn nav-sub-btn" href="#storyline">📖 Storyline</a>
+    <a class="nav-btn nav-sub-btn" href="#storylines">📖 Storylines</a>
     <a class="nav-btn nav-sub-btn" href="#characters">🧍 Characters</a>
     <a class="nav-btn nav-sub-btn" href="#geography">🗺️ Geography</a>
-
     <div class="nav-divider"></div>
-
-    <a class="nav-btn" href="index.html#contact"><span class="icon">📫</span> Contact</a>
-
+    <a class="nav-btn" href="/poetry.html"><span class="icon">✍️</span> Poetry</a>
+    <a class="nav-btn" href="/index.html#contact"><span class="icon">📫</span> Contact</a>
     <div class="nav-footer">© 2025 Justin Adrian Halim</div>
   </nav>
 
-  <!-- ── MAIN ── -->
   <main>
-
     <div class="page-header">
-      <a class="back-link" href="index.html">← Back to Hub</a>
+      <a class="back-link" href="/index.html">← Back to Hub</a>
       <h1>Worldbuilding</h1>
       <p>Characters, lore, history, culture, and the geography of a world still being built.</p>
     </div>
 
+    <!-- ══════════════════════════════════════════
+         STORYLINES
+         To add a new storyline:
+           1. Duplicate a .storyline-card block
+           2. Update the title, description, badges
+           3. Set href on the btn-link to your new folder
+              e.g. href="worldbuilding/storylines/my-campaign/"
+    ══════════════════════════════════════════ -->
+    <section class="wb-section" id="storylines">
+      <div class="section-label">📖 Storylines</div>
 
-    <!-- ════════════════════════════════════════
-         GENERAL
-         Add .lore-block entries below for
-         overview lore, magic systems, rules of
-         the world, factions, timeline, etc.
-    ════════════════════════════════════════ -->
-    <section class="wb-section" id="general">
-      <div class="section-label">🌐 General</div>
-
-      <!-- ── LORE ENTRY: copy/paste this block to add more ── -->
-      <div class="lore-block">
-        <span class="lore-tag">Overview</span>
-        <h3>The World</h3>
-        <p>
-          <!-- Paste your general world overview here -->
-          A world in progress. Details to be added.
-        </p>
-      </div>
-      <!-- ── end lore entry ── -->
-
-      <!-- Example of a second entry — duplicate the block above as needed -->
-      <div class="lore-block">
-        <span class="lore-tag">Magic System</span>
-        <h3>Coming Soon</h3>
-        <p>Details to be added.</p>
+      <!-- CAMPAIGN: duplicate this block for each campaign/storyline -->
+      <div class="storyline-card">
+        <h3>DnD Campaign 1</h3>
+        <p>Brief description of the campaign — setting, premise, or hook.</p>
+        <div class="card-meta">
+          <span class="badge">DnD</span>
+          <span class="badge">In Progress</span>
+          <a class="btn-link" href="worldbuilding/storylines/dnd-campaign-1/">↗ Open</a>
+        </div>
       </div>
 
+      <!-- SHORT STORY: same block, different badge -->
+      <div class="storyline-card">
+        <h3>Short Story 1</h3>
+        <p>A brief description of the short story.</p>
+        <div class="card-meta">
+          <span class="badge">Short Story</span>
+          <a class="btn-link" href="worldbuilding/storylines/short-story-1/">↗ Open</a>
+        </div>
+      </div>
+
+      <!-- COMING SOON placeholder — remove when page is ready -->
+      <div class="soon-card">
+        <h3>Storyline Title</h3>
+        <p>Coming soon™.</p>
+      </div>
     </section>
 
-
-    <!-- ════════════════════════════════════════
-         STORYLINE
-         Add .lore-block entries for each
-         chapter, arc, or plot thread.
-         Use lore-tag for: Arc, Chapter, Event…
-    ════════════════════════════════════════ -->
-    <section class="wb-section" id="storyline">
-      <div class="section-label">📖 Storyline</div>
-
-      <div class="lore-block">
-        <span class="lore-tag">Arc I</span>
-        <h3>Coming Soon</h3>
-        <p>Storyline details to be added.</p>
-      </div>
-
-    </section>
-
-
-    <!-- ════════════════════════════════════════
+    <!-- ══════════════════════════════════════════
          CHARACTERS
-         Add a .character-card per character.
-
-         TO ADD A CHARACTER IMAGE:
-         1. Put the image in assets/images/characters/
-         2. Replace the style on .char-img:
-            style="background-image: url('assets/images/characters/yourfile.jpg')"
-         3. Remove the placeholder text inside .char-img
-    ════════════════════════════════════════ -->
+         To add a character:
+           1. Duplicate a .char-card block
+           2. Set href to their page
+           3. Set background-image on .char-img when art is ready:
+              style="background-image: url('/assets/images/characters/name.jpg')"
+    ══════════════════════════════════════════ -->
     <section class="wb-section" id="characters">
       <div class="section-label">🧍 Characters</div>
+      <div class="char-grid">
 
-      <div class="character-grid">
-
-        <!-- ── CHARACTER CARD: copy/paste to add more ── -->
-        <div class="character-card">
-          <div class="char-img">
-            <!-- Replace with: style="background-image: url('assets/images/characters/name.jpg')" -->
-            No image yet
-          </div>
+        <!-- CHARACTER CARD: duplicate for each character -->
+        <a class="char-card" href="worldbuilding/characters/character-1.html">
+          <div class="char-img"></div>
           <div class="char-info">
             <div class="char-name">Character Name</div>
             <div class="char-role">Role / Title</div>
-            <div class="char-desc">
-              A brief description of the character — personality, background, role in the story.
-            </div>
           </div>
-        </div>
-        <!-- ── end character card ── -->
+        </a>
 
-        <!-- Duplicate the block above for each character -->
-        <div class="character-card">
-          <div class="char-img">No image yet</div>
+        <a class="char-card" href="worldbuilding/characters/character-2.html">
+          <div class="char-img"></div>
           <div class="char-info">
             <div class="char-name">Character Name</div>
             <div class="char-role">Role / Title</div>
-            <div class="char-desc">A brief description.</div>
           </div>
-        </div>
+        </a>
 
       </div>
     </section>
 
-
-    <!-- ════════════════════════════════════════
+    <!-- ══════════════════════════════════════════
          GEOGRAPHY
-         Add a .geo-entry per location.
-         Alternates image left/right automatically
-         via the .flip class on every other entry.
-
-         TO ADD A LOCATION IMAGE:
-         1. Put the image in assets/images/geography/
-         2. Replace the style on .geo-img:
-            style="background-image: url('assets/images/geography/yourfile.jpg')"
-         3. Remove the placeholder text inside .geo-img
-    ════════════════════════════════════════ -->
+         To add a location:
+           1. Duplicate a .loc-card block
+           2. Set href to the location page
+           3. Set background-image on .loc-img when ready:
+              style="background-image: url('/assets/images/geography/name.jpg')"
+    ══════════════════════════════════════════ -->
     <section class="wb-section" id="geography">
       <div class="section-label">🗺️ Geography</div>
+      <div class="loc-grid">
 
-      <!-- ── LOCATION ENTRY (image LEFT): copy/paste to add more ── -->
-      <div class="geo-entry">
-        <div class="geo-img">
-          <!-- Replace with: style="background-image: url('assets/images/geography/location.jpg')" -->
-          No image yet
-        </div>
-        <div class="geo-text">
-          <span class="geo-type">Region</span>
-          <h3>Location Name</h3>
-          <p>
-            Description of this location — its geography, climate, people, history, and significance to the story.
-          </p>
-        </div>
+        <!-- LOCATION CARD: duplicate for each country / region -->
+        <a class="loc-card" href="worldbuilding/geography/country-1/">
+          <div class="loc-img"></div>
+          <div class="loc-info">
+            <div class="loc-type">Country</div>
+            <div class="loc-name">Country Name</div>
+          </div>
+        </a>
+
+        <a class="loc-card" href="worldbuilding/geography/country-2/">
+          <div class="loc-img"></div>
+          <div class="loc-info">
+            <div class="loc-type">Region</div>
+            <div class="loc-name">Region Name</div>
+          </div>
+        </a>
+
       </div>
-      <!-- ── end location entry ── -->
-
-      <!-- ── LOCATION ENTRY (image RIGHT — add .flip): ── -->
-      <div class="geo-entry flip">
-        <div class="geo-img">No image yet</div>
-        <div class="geo-text">
-          <span class="geo-type">City</span>
-          <h3>Location Name</h3>
-          <p>Description of this location.</p>
-        </div>
-      </div>
-
     </section>
-
   </main>
 
   <script>
-    // Highlight active sidebar section on scroll
     const sections = document.querySelectorAll('.wb-section[id]');
     const navBtns  = document.querySelectorAll('.nav-sub-btn');
-
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           navBtns.forEach(b => b.classList.remove('active'));
-          const active = document.querySelector(`.nav-sub-btn[href="#${entry.target.id}"]`);
-          if (active) active.classList.add('active');
+          const a = document.querySelector(`.nav-sub-btn[href="#${entry.target.id}"]`);
+          if (a) a.classList.add('active');
         }
       });
     }, { threshold: 0.3 });
-
     sections.forEach(s => observer.observe(s));
   </script>
-
 </body>
 </html>
