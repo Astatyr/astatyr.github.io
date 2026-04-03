@@ -31,27 +31,27 @@ jobs:
       - name: Generate manifest and shell pages
         run: |
           python3 << 'PYEOF'
-import os, json, shutil
+          import os, json, shutil
 
-# ── helpers ──────────────────────────────────────────────
-def to_title(s):
-    return s.replace('-', ' ').replace('_', ' ')
+          # ── helpers ──────────────────────────────────────────────
+          def to_title(s):
+              return s.replace('-', ' ').replace('_', ' ')
 
-def read_meta(folder):
-    meta = {}
-    p = os.path.join(folder, '_meta.txt')
-    if os.path.exists(p):
-        for line in open(p):
-            if ':' in line:
-                k, v = line.split(':', 1)
-                meta[k.strip()] = v.strip()
-    return meta
+          def read_meta(folder):
+              meta = {}
+              p = os.path.join(folder, '_meta.txt')
+              if os.path.exists(p):
+                  for line in open(p):
+                      if ':' in line:
+                          k, v = line.split(':', 1)
+                          meta[k.strip()] = v.strip()
+              return meta
 
-def write_if_missing(path, content):
-    if not os.path.exists(path):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        open(path, 'w').write(content)
-        print(f"  Created: {path}")
+          def write_if_missing(path, content):
+              if not os.path.exists(path):
+                  os.makedirs(os.path.dirname(path), exist_ok=True)
+                  open(path, 'w').write(content)
+                  print(f"  Created: {path}")
 
 # ── shared CSS / nav (used across all shell pages) ──────
 SHARED_CSS = """
