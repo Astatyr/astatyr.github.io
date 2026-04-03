@@ -1,39 +1,15 @@
-# ─────────────────────────────────────────────────────────────
-# HOW THIS WORKS:
-#   1. You write content in Microsoft Word (.docx)
-#   2. Save the file into the content/ folder in your repo
-#   3. Commit & push in SourceTree (like any other file)
-#   4. This action automatically converts it to HTML in generated/
-#   5. Your pages fetch from generated/ and display the content
-#
-# FOLDER STRUCTURE FOR YOUR WORD DOCS:
-#   content/
-#     storylines/
-#       dnd-campaign-1/
-#         index.docx        ← campaign overview
-#         chapter-1.docx    ← chapter 1
-#         chapter-2.docx    ← chapter 2
-#     characters/
-#         character-1.docx
-#         character-2.docx
-#     geography/
-#         country-1/
-#           index.docx      ← country overview
-#           city-1.docx     ← city page
-# ─────────────────────────────────────────────────────────────
-
 name: Convert Word docs to HTML
 
 on:
   push:
     paths:
-      - 'content/**/*.docx'   # Only runs when a .docx file changes
+      - 'content/**'
 
 jobs:
   convert:
     runs-on: ubuntu-latest
     permissions:
-      contents: write         # Needed to commit the generated files back
+      contents: write
 
     steps:
       - name: Checkout repo
@@ -45,33 +21,115 @@ jobs:
       - name: Convert all DOCX files to HTML
         run: |
           find content -name "*.docx" | while read docx_file; do
-            # Mirror the path: content/... → generated/...
             html_file="${docx_file/content\//generated/}"
             html_file="${html_file%.docx}.html"
-
-            # Create the output directory if it doesn't exist
             mkdir -p "$(dirname "$html_file")"
-
-            # Convert: extract just the body content (no full HTML wrapper)
-            pandoc "$docx_file" \
-              --from docx \
-              --to html \
-              --no-highlight \
-              --wrap=none \
-              -o "$html_file"
-
-            echo "Converted: $docx_file → $html_file"
+            pandoc "$docx_file" --from docx --to html --no-highlight --wrap=none -o "$html_file"
+            echo "Converted: $docx_file -> $html_file"
           done
 
-      - name: Commit generated HTML files
+      - name: Generate manifest.json
+        run: |
+          python3 << 'EOF'
+          import os, json
+
+          def to_title(s):
+              return s.replace('-', ' ').replace('_', ' ')
+
+          def read_meta(folder):
+              """
+              Optional _meta.txt in each content folder.
+              Format (one key: value per line):
+                title: Vrey — Prelude of Fear
+                type: DnD
+                status: In Progress
+                description: A story about...
+              """
+              meta = {}
+              path = os.path.join(folder, '_meta.txt')
+              if os.path.exists(path):
+                  for line in open(path):
+                      if ':' in line:
+                          k, v = line.split(':', 1)
+                          meta[k.strip()] = v.strip()
+              return meta
+
+          manifest = {"storylines": [], "characters": [], "geography": []}
+
+          # STORYLINES
+          sl_root = "content/storylines"
+          if os.path.exists(sl_root):
+              for sl_name in sorted(os.listdir(sl_root)):
+                  sl_path = os.path.join(sl_root, sl_name)
+                  if not os.path.isdir(sl_path): continue
+                  meta = read_meta(sl_path)
+                  chapters = []
+                  for f in sorted(os.listdir(sl_path)):
+                      if f.endswith('.docx') and f.lower() != 'index.docx' and not f.startswith('_'):
+                          ch_id = f[:-5]
+                          chapters.append({"id": ch_id, "title": to_title(ch_id)})
+                  manifest['storylines'].append({
+                      "id": sl_name,
+                      "title": meta.get('title', to_title(sl_name)),
+                      "type": meta.get('type', 'Storyline'),
+                      "status": meta.get('status', 'In Progress'),
+                      "description": meta.get('description', ''),
+                      "chapters": chapters
+                  })
+
+          # CHARACTERS
+          ch_root = "content/characters"
+          if os.path.exists(ch_root):
+              for f in sorted(os.listdir(ch_root)):
+                  if f.endswith('.docx') and not f.startswith('_'):
+                      ch_id = f[:-5]
+                      meta_path = os.path.join(ch_root, f'_{ch_id}_meta.txt')
+                      meta = {}
+                      if os.path.exists(meta_path):
+                          for line in open(meta_path):
+                              if ':' in line:
+                                  k, v = line.split(':', 1)
+                                  meta[k.strip()] = v.strip()
+                      manifest['characters'].append({
+                          "id": ch_id,
+                          "title": meta.get('title', to_title(ch_id)),
+                          "role": meta.get('role', '')
+                      })
+
+          # GEOGRAPHY
+          geo_root = "content/geography"
+          if os.path.exists(geo_root):
+              for country_name in sorted(os.listdir(geo_root)):
+                  country_path = os.path.join(geo_root, country_name)
+                  if not os.path.isdir(country_path): continue
+                  meta = read_meta(country_path)
+                  locations = []
+                  for f in sorted(os.listdir(country_path)):
+                      if f.endswith('.docx') and f.lower() != 'index.docx' and not f.startswith('_'):
+                          loc_id = f[:-5]
+                          locations.append({"id": loc_id, "title": to_title(loc_id)})
+                  manifest['geography'].append({
+                      "id": country_name,
+                      "title": meta.get('title', to_title(country_name)),
+                      "type": meta.get('type', 'Location'),
+                      "description": meta.get('description', ''),
+                      "locations": locations
+                  })
+
+          os.makedirs("generated", exist_ok=True)
+          with open("generated/manifest.json", "w") as f:
+              json.dump(manifest, f, indent=2)
+          print("Done:", json.dumps(manifest, indent=2))
+          EOF
+
+      - name: Commit generated files
         run: |
           git config user.name  "GitHub Actions"
           git config user.email "actions@github.com"
           git add generated/
-          # Only commit if there are actual changes
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Auto-convert Word docs [skip ci]"
+            git commit -m "Auto-convert docs and update manifest [skip ci]"
             git push
           fi

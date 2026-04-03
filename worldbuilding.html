@@ -8,22 +8,14 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --white: #ffffff; --off-white: #f7f6f3; --ink: #1a1a1a;
-      --muted: #888; --border: #e4e2dc; --nav-w: 220px; --hover-bg: #f0ede6;
-    }
+    :root { --white: #ffffff; --off-white: #f7f6f3; --ink: #1a1a1a; --muted: #888; --border: #e4e2dc; --nav-w: 220px; --hover-bg: #f0ede6; }
     html { scroll-behavior: smooth; }
     body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); display: flex; min-height: 100vh; }
 
-    /* ── SIDEBAR ── */
-    nav {
-      position: fixed; top: 0; left: 0; width: var(--nav-w); height: 100vh;
-      background: var(--off-white); border-right: 1px solid var(--border);
-      display: flex; flex-direction: column; padding: 2.5rem 1.5rem; gap: 0.4rem; z-index: 100; overflow-y: auto;
-    }
+    nav { position: fixed; top: 0; left: 0; width: var(--nav-w); height: 100vh; background: var(--off-white); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 2.5rem 1.5rem; gap: 0.4rem; z-index: 100; overflow-y: auto; }
     .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); line-height: 1.2; text-decoration: none; display: block; }
     .nav-logo span { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 300; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.3rem; }
-    .nav-btn { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.8rem; border-radius: 8px; text-decoration: none; color: var(--muted); font-size: 0.82rem; font-weight: 400; transition: background 0.18s ease, color 0.18s ease; border: none; background: transparent; width: 100%; text-align: left; }
+    .nav-btn { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.8rem; border-radius: 8px; text-decoration: none; color: var(--muted); font-size: 0.82rem; font-weight: 400; transition: background 0.18s, color 0.18s; border: none; background: transparent; width: 100%; text-align: left; }
     .nav-btn .icon { font-size: 1rem; flex-shrink: 0; }
     .nav-btn:hover, .nav-btn.active { background: var(--hover-bg); color: var(--ink); }
     .nav-divider { height: 1px; background: var(--border); margin: 0.8rem 0; }
@@ -31,60 +23,47 @@
     .nav-sub-btn { font-size: 0.77rem; padding-left: 1.8rem; }
     .nav-footer { margin-top: auto; font-size: 0.7rem; color: var(--muted); padding-top: 1rem; }
 
-    /* ── MAIN ── */
     main { margin-left: var(--nav-w); flex: 1; padding: 4rem 5rem; max-width: 900px; }
-
     .page-header { margin-bottom: 3.5rem; animation: fadeUp 0.4s ease both; }
     .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--muted); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.15s; }
     .back-link:hover { color: var(--ink); }
     .page-header h1 { font-family: 'DM Serif Display', serif; font-size: 2.8rem; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.6rem; }
     .page-header p { font-size: 0.9rem; color: var(--muted); font-weight: 300; line-height: 1.7; }
 
-    /* ── SECTIONS ── */
     .wb-section { margin-bottom: 4rem; animation: fadeUp 0.5s ease both; }
-    .wb-section:nth-child(2) { animation-delay: 0.05s; }
-    .wb-section:nth-child(3) { animation-delay: 0.10s; }
-    .wb-section:nth-child(4) { animation-delay: 0.15s; }
-    .wb-section:nth-child(5) { animation-delay: 0.20s; }
-
     .section-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.4rem; display: flex; align-items: center; gap: 0.6rem; }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* ── STORYLINE CARDS ── */
-    .storyline-card {
-      border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem;
-      margin-bottom: 1rem; transition: box-shadow 0.2s ease, transform 0.2s ease; background: var(--white);
-    }
+    /* Storyline cards */
+    .storyline-card { border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 1rem; transition: box-shadow 0.2s, transform 0.2s; background: var(--white); }
     .storyline-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.07); transform: translateY(-2px); }
     .storyline-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; font-weight: 400; color: var(--ink); margin-bottom: 0.3rem; }
-    .storyline-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; font-weight: 300; margin-bottom: 0.8rem; }
+    .storyline-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; font-weight: 300; margin-bottom: 0.8rem; min-height: 1.2em; }
     .card-meta { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
     .badge { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.06em; padding: 0.22rem 0.65rem; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); text-transform: uppercase; }
     .btn-link { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; font-weight: 500; color: var(--ink); text-decoration: none; padding: 0.25rem 0.7rem; border: 1px solid var(--border); border-radius: 20px; transition: background 0.15s, border-color 0.15s; }
     .btn-link:hover { background: var(--off-white); border-color: #ccc; }
 
-    /* ── CHARACTER GRID ── */
+    /* Character grid */
     .char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
-    .char-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; transition: box-shadow 0.2s ease, transform 0.2s ease; background: var(--white); display: block; }
+    .char-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; transition: box-shadow 0.2s, transform 0.2s; background: var(--white); display: block; }
     .char-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
     .char-card .char-img { width: 100%; aspect-ratio: 3/4; background-color: var(--off-white); background-size: cover; background-position: center top; }
     .char-card .char-info { padding: 0.8rem; }
     .char-card .char-name { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--ink); margin-bottom: 0.15rem; }
     .char-card .char-role { font-size: 0.72rem; color: var(--muted); font-weight: 300; }
 
-    /* ── LOCATION GRID ── */
+    /* Location grid */
     .loc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
-    .loc-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; transition: box-shadow 0.2s ease, transform 0.2s ease; background: var(--white); display: block; }
+    .loc-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; transition: box-shadow 0.2s, transform 0.2s; background: var(--white); display: block; }
     .loc-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
-    .loc-card .loc-img { width: 100%; aspect-ratio: 16/9; background-color: var(--off-white); background-size: cover; background-position: center; }
+    .loc-card .loc-img { width: 100%; aspect-ratio: 16/9; background-color: var(--off-white); }
     .loc-card .loc-info { padding: 1rem 1.1rem; }
     .loc-card .loc-name { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--ink); margin-bottom: 0.2rem; }
     .loc-card .loc-type { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 
-    /* ── COMING SOON ── */
-    .soon-card { border: 1px dashed var(--border); border-radius: 12px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; }
-    .soon-card h3 { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 1rem; color: #bbb; margin-bottom: 0.2rem; }
-    .soon-card p { font-size: 0.78rem; color: #ccc; font-weight: 300; }
+    .empty-note { font-size: 0.82rem; color: #ccc; font-style: italic; }
+    .loading { font-size: 0.82rem; color: var(--muted); font-style: italic; }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
     @media (max-width: 768px) { nav { display: none; } main { margin-left: 0; padding: 2rem 1.5rem; } .page-header h1 { font-size: 2rem; } }
@@ -115,113 +94,119 @@
       <p>Characters, lore, history, culture, and the geography of a world still being built.</p>
     </div>
 
-    <!-- ══════════════════════════════════════════
-         STORYLINES
-         To add a new storyline:
-           1. Duplicate a .storyline-card block
-           2. Update the title, description, badges
-           3. Set href on the btn-link to your new folder
-              e.g. href="worldbuilding/storylines/my-campaign/"
-    ══════════════════════════════════════════ -->
     <section class="wb-section" id="storylines">
       <div class="section-label">📖 Storylines</div>
-
-      <!-- CAMPAIGN: duplicate this block for each campaign/storyline -->
-      <div class="storyline-card">
-        <h3>Vrey — Prelude of Fear</h3>
-        <p>Brief description of the campaign — setting, premise, or hook.</p>
-        <div class="card-meta">
-          <span class="badge">DnD</span>
-          <span class="badge">In Progress</span>
-          <a class="btn-link" href="worldbuilding/storylines/Vrey-Prelude-of-Fear/">↗ Open</a>
-        </div>
-      </div>
-
-      <!-- COMING SOON placeholder — duplicate the card above to add more storylines -->
-      <div class="soon-card">
-        <h3>More coming soon™</h3>
-        <p>More storylines to be added.</p>
-      </div>
+      <div id="storylines-list"><p class="loading">Loading…</p></div>
     </section>
 
-    <!-- ══════════════════════════════════════════
-         CHARACTERS
-         To add a character:
-           1. Duplicate a .char-card block
-           2. Set href to their page
-           3. Set background-image on .char-img when art is ready:
-              style="background-image: url('/assets/images/characters/name.jpg')"
-    ══════════════════════════════════════════ -->
     <section class="wb-section" id="characters">
       <div class="section-label">🧍 Characters</div>
-      <div class="char-grid">
-
-        <!-- CHARACTER CARD: duplicate for each character -->
-        <a class="char-card" href="worldbuilding/characters/character-1.html">
-          <div class="char-img"></div>
-          <div class="char-info">
-            <div class="char-name">Character Name</div>
-            <div class="char-role">Role / Title</div>
-          </div>
-        </a>
-
-        <a class="char-card" href="worldbuilding/characters/character-2.html">
-          <div class="char-img"></div>
-          <div class="char-info">
-            <div class="char-name">Character Name</div>
-            <div class="char-role">Role / Title</div>
-          </div>
-        </a>
-
-      </div>
+      <div id="characters-list" class="char-grid"></div>
     </section>
 
-    <!-- ══════════════════════════════════════════
-         GEOGRAPHY
-         To add a location:
-           1. Duplicate a .loc-card block
-           2. Set href to the location page
-           3. Set background-image on .loc-img when ready:
-              style="background-image: url('/assets/images/geography/name.jpg')"
-    ══════════════════════════════════════════ -->
     <section class="wb-section" id="geography">
       <div class="section-label">🗺️ Geography</div>
-      <div class="loc-grid">
-
-        <!-- LOCATION CARD: duplicate for each country / region -->
-        <a class="loc-card" href="worldbuilding/geography/country-1/">
-          <div class="loc-img"></div>
-          <div class="loc-info">
-            <div class="loc-type">Country</div>
-            <div class="loc-name">Country Name</div>
-          </div>
-        </a>
-
-        <a class="loc-card" href="worldbuilding/geography/country-2/">
-          <div class="loc-img"></div>
-          <div class="loc-info">
-            <div class="loc-type">Region</div>
-            <div class="loc-name">Region Name</div>
-          </div>
-        </a>
-
-      </div>
+      <div id="geography-list" class="loc-grid"></div>
     </section>
   </main>
 
   <script>
+    async function loadManifest() {
+      try {
+        const res = await fetch('/generated/manifest.json');
+        if (!res.ok) throw new Error('manifest not found');
+        return await res.json();
+      } catch {
+        return null;
+      }
+    }
+
+    function renderStorylines(storylines) {
+      const el = document.getElementById('storylines-list');
+      if (!storylines || storylines.length === 0) {
+        el.innerHTML = '<p class="empty-note">No storylines yet — add a folder inside content/storylines/ with an index.docx.</p>';
+        return;
+      }
+      el.innerHTML = storylines.map(s => `
+        <div class="storyline-card">
+          <h3>${s.title}</h3>
+          <p>${s.description || 'No description yet — add one in content/storylines/${s.id}/_meta.txt'}</p>
+          <div class="card-meta">
+            <span class="badge">${s.type}</span>
+            <span class="badge">${s.status}</span>
+            <a class="btn-link" href="/worldbuilding/storylines/${s.id}/">↗ Open</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCharacters(characters) {
+      const el = document.getElementById('characters-list');
+      if (!characters || characters.length === 0) {
+        el.innerHTML = '<p class="empty-note">No characters yet — add .docx files inside content/characters/.</p>';
+        return;
+      }
+      el.innerHTML = characters.map(c => `
+        <a class="char-card" href="/worldbuilding/characters/${c.id}.html">
+          <div class="char-img"></div>
+          <div class="char-info">
+            <div class="char-name">${c.title}</div>
+            <div class="char-role">${c.role || ''}</div>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    function renderGeography(geography) {
+      const el = document.getElementById('geography-list');
+      if (!geography || geography.length === 0) {
+        el.innerHTML = '<p class="empty-note">No locations yet — add folders inside content/geography/.</p>';
+        return;
+      }
+      el.innerHTML = geography.map(g => `
+        <a class="loc-card" href="/worldbuilding/geography/${g.id}/">
+          <div class="loc-img"></div>
+          <div class="loc-info">
+            <div class="loc-type">${g.type}</div>
+            <div class="loc-name">${g.title}</div>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    loadManifest().then(data => {
+      if (!data) {
+        document.getElementById('storylines-list').innerHTML =
+          '<p class="empty-note">Manifest not found. Push your content files and wait for the GitHub Action to run.</p>';
+        return;
+      }
+      renderStorylines(data.storylines);
+      renderCharacters(data.characters);
+      renderGeography(data.geography);
+    });
+
+    // Sidebar scroll highlight
     const sections = document.querySelectorAll('.wb-section[id]');
     const navBtns  = document.querySelectorAll('.nav-sub-btn');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
+    new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
           navBtns.forEach(b => b.classList.remove('active'));
-          const a = document.querySelector(`.nav-sub-btn[href="#${entry.target.id}"]`);
+          const a = document.querySelector(`.nav-sub-btn[href="#${e.target.id}"]`);
           if (a) a.classList.add('active');
         }
       });
-    }, { threshold: 0.3 });
-    sections.forEach(s => observer.observe(s));
+    }, { threshold: 0.3 }).observe && sections.forEach(s =>
+      new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            navBtns.forEach(b => b.classList.remove('active'));
+            const a = document.querySelector(`.nav-sub-btn[href="#${e.target.id}"]`);
+            if (a) a.classList.add('active');
+          }
+        });
+      }, { threshold: 0.3 }).observe(s)
+    );
   </script>
 </body>
 </html>
