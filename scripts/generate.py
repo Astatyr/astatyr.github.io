@@ -44,10 +44,8 @@ main { margin-left: var(--nav-w); flex: 1; padding: 4rem 5rem; max-width: 820px;
 .section-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
 .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 .wb-section { margin-bottom: 3.5rem; }
-.doc-content h1, .doc-content h2 { font-family: 'DM Serif Display', serif; font-weight: 400; color: var(--ink); margin-bottom: 0.6rem; margin-top: 1.6rem; }
-.doc-content h1 { font-size: 1.5rem; }
-.doc-content h2 { font-size: 1.2rem; }
-.doc-content h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.4rem; margin-top: 1.2rem; }
+.doc-content h1 { font-family: 'DM Serif Display', serif; font-weight: 400; color: var(--ink); font-size: 1.5rem; margin-bottom: 0.6rem; margin-top: 1.6rem; }.doc-content h2 { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.2rem; margin-top: 2rem; display: flex; align-items: center; gap: 0.6rem; }.doc-content h2::after { content: ''; flex: 1; height: 1px; background: var(--border); }.doc-content h3 { font-family: 'DM Serif Display', serif; font-size: 1rem; font-weight: 400; color: var(--ink); margin-bottom: 0.4rem; margin-top: 1.2rem; }
+
 .doc-content p { font-size: 0.9rem; color: #3a3a3a; line-height: 1.85; font-weight: 300; margin-bottom: 1rem; }
 .doc-content ul, .doc-content ol { padding-left: 1.4rem; margin-bottom: 0.8rem; }
 .doc-content li { font-size: 0.9rem; color: #3a3a3a; line-height: 1.8; font-weight: 300; margin-bottom: 0.3rem; }
@@ -427,6 +425,25 @@ os.makedirs("generated", exist_ok=True)
 with open("generated/manifest.json", "w", encoding='utf-8') as f:
     json.dump(manifest, f, indent=2)
 print("manifest.json written.")
+
+# Convert literal markdown headings (## text) to HTML headings
+# This handles cases where Word docs use ## instead of Heading styles
+import re as _re
+for root, dirs, files in os.walk("generated"):
+    dirs[:] = [d for d in dirs if d != "media"]
+    for fname in files:
+        if not fname.endswith(".html"):
+            continue
+        fpath = os.path.join(root, fname)
+        html = open(fpath, encoding="utf-8").read()
+        # Replace <p>## Title</p> → <h2>Title</h2>, etc.
+        # === Title  →  section divider (h2 styled as section-label)
+        # ###  Title  →  serif subheading (h3)
+        # ##   Title  →  large serif heading (h1) — for document-level titles
+        html = _re.sub(r'<p>===\s+(.*?)</p>', r'<h2></h2>', html)
+        html = _re.sub(r'<p>###\s+(.*?)</p>', r'<h3></h3>', html)
+        html = _re.sub(r'<p>##\s+(.*?)</p>',  r'<h1></h1>', html)
+        open(fpath, "w", encoding="utf-8").write(html)
 
 # Fix image paths in all generated HTML files
 # Pandoc writes src="generated/media/..." but served from a subpath,
