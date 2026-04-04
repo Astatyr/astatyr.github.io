@@ -99,8 +99,8 @@ def head(title="Astatyr"):
 <body>"""
 
 NAV = """<nav>
-  <a class="nav-logo" href="/index.html">Astatyr<span>Hub Page</span></a>
-  <a class="nav-btn" href="/worldbuilding.html">&#127758; Worldbuilding</a>
+  <a class="nav-logo" href="/">Astatyr<span>Hub Page</span></a>
+  <a class="nav-btn" href="/worldbuilding">&#127758; Worldbuilding</a>
   <div class="nav-divider"></div>
   <div class="nav-section-label" id="nav-section-title">Loading...</div>
   <div id="nav-items"></div>
@@ -114,7 +114,7 @@ FOOT = "\n</body>\n</html>"
 def make_storyline_index():
     return head() + NAV + """
 <main style="animation:fadeUp .4s ease both">
-  <a class="back-link" href="/worldbuilding.html">&larr; Worldbuilding</a>
+  <a class="back-link" href="/worldbuilding">&larr; Worldbuilding</a>
   <div class="page-title" id="page-title">Loading&hellip;</div>
   <div class="page-meta" id="page-meta"></div>
   <div class="page-desc" id="page-desc"></div>
@@ -167,7 +167,7 @@ init();
 def make_chapter():
     return head() + NAV + """
 <main style="animation:fadeUp .4s ease both">
-  <a class="back-link" href="/worldbuilding.html">&larr; Worldbuilding</a>
+  <a class="back-link" href="/worldbuilding">&larr; Worldbuilding</a>
   <div id="ch-label" class="page-meta">Chapter</div>
   <div id="ch-title" class="page-title">Loading&hellip;</div>
   <div style="margin-top:2rem" id="ch-content" class="doc-content"><p class="loading">Loading&hellip;</p></div>
@@ -223,7 +223,7 @@ def make_character(char_id=""):
 
     html = head() + NAV + """
 <main style="animation:fadeUp .4s ease both">
-  <a class="back-link" href="/worldbuilding.html">&larr; Worldbuilding</a>
+  <a class="back-link" href="/worldbuilding">&larr; Worldbuilding</a>
   <div class="char-portrait" id="char-portrait" PORTRAIT_STYLE_PLACEHOLDER></div>
   <div class="page-title" id="char-name">Loading&hellip;</div>
   <div class="page-meta" id="char-role-text"></div>
@@ -263,7 +263,7 @@ init();
 def make_chapter():
     return head() + NAV + """
 <main style="animation:fadeUp .4s ease both">
-  <a class="back-link" href="/worldbuilding.html">&larr; Worldbuilding</a>
+  <a class="back-link" href="/worldbuilding">&larr; Worldbuilding</a>
   <div id="ch-label" class="page-meta">Chapter</div>
   <div id="ch-title" class="page-title">Loading&hellip;</div>
   <div style="margin-top:2rem" id="ch-content" class="doc-content"><p class="loading">Loading&hellip;</p></div>
@@ -310,8 +310,8 @@ init();
 
 def make_location():
     return head() + """<nav>
-  <a class="nav-logo" href="/index.html">Astatyr<span>Hub Page</span></a>
-  <a class="nav-btn" href="/worldbuilding.html">&#127758; Worldbuilding</a>
+  <a class="nav-logo" href="/">Astatyr<span>Hub Page</span></a>
+  <a class="nav-btn" href="/worldbuilding">&#127758; Worldbuilding</a>
   <div class="nav-divider"></div>
   <div class="nav-section-label" id="nav-section-title">Geography</div>
   <div id="nav-items"></div>
@@ -326,7 +326,7 @@ def make_location():
     </div>
   </div>
   <div class="content-area">
-    <a class="back-link" href="/worldbuilding.html">&larr; Worldbuilding</a>
+    <a class="back-link" href="/worldbuilding">&larr; Worldbuilding</a>
     <div class="wb-section">
       <div class="section-label">Overview</div>
       <div id="loc-content" class="doc-content"><p class="loading">Loading&hellip;</p></div>

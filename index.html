@@ -423,7 +423,7 @@
         <h3>Worldbuilding</h3>
         <p>Character designs, history, culture, geography, and many more.</p>
         <div class="card-meta">
-          <a class="btn-link" href="worldbuilding.html">↗ Explore</a>
+          <a class="btn-link" href="/worldbuilding">↗ Explore</a>
         </div>
       </div>
 
@@ -431,7 +431,7 @@
         <h3>Poetry</h3>
         <p>Feelings Unbounded.</p>
         <div class="card-meta">
-          <a class="btn-link" href="poetry.html">↗ Read</a>
+          <a class="btn-link" href="/poetry">↗ Read</a>
         </div>
       </div>
 
@@ -452,7 +452,7 @@
           </div>
           <div class="contact-row">
             <span class="label">Email</span>
-            <a href="mailto:justin.halim20@gmail.com">justin.halim20@gmail.com</a>
+            <a href="/cdn-cgi/l/email-protection#264c5355524f48084e474a4f4b141666414b474f4a0845494b"><span class="__cf_email__" data-cfemail="02687771766b6c2c6a636e6b6f303242656f636b6e2c616d6f">[email&#160;protected]</span></a>
           </div>
           <div class="contact-row">
             <span class="label">LinkedIn</span>
@@ -464,7 +464,7 @@
 
   </main>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Highlight active nav button on scroll
     const sections = document.querySelectorAll('section[id]');
     const navBtns = document.querySelectorAll('.nav-btn[href^="#"]');
@@ -473,14 +473,4 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           navBtns.forEach(btn => btn.classList.remove('active'));
-          const active = document.querySelector(`.nav-btn[href="#${entry.target.id}"]`);
-          if (active) active.classList.add('active');
-        }
-      });
-    }, { threshold: 0.4 });
-
-    sections.forEach(s => observer.observe(s));
-  </script>
-
-</body>
-</html>
+          const
