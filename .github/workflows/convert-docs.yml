@@ -3,8 +3,7 @@ name: Convert Word docs to HTML
 on:
   push:
     paths:
-      - "content/**"
-  workflow_dispatch:
+      - 'content/**'
 
 jobs:
   convert:
@@ -17,88 +16,29 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Pandoc
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc
+        run: sudo apt-get install -y pandoc
 
-      - name: Convert DOCX → HTML Fragments
+      - name: Convert all DOCX files to HTML
         run: |
-          set -e
           find content -name "*.docx" | while read docx_file; do
-            # Mirror the content path into the generated folder
             html_file="${docx_file/content\//generated/}"
             html_file="${html_file%.docx}.html"
             mkdir -p "$(dirname "$html_file")"
-
-            # Convert to HTML body fragment (no header/footer)
-            pandoc "$docx_file" --from docx --to html --wrap=none -o "$html_file"
+            pandoc "$docx_file" --from docx --to html --no-highlight --wrap=none -o "$html_file"
+            echo "Converted: $docx_file -> $html_file"
           done
 
-      - name: Generate Manifest and Injected Pages
+      - name: Generate manifest and shell pages
+        run: python3 scripts/generate.py
+
+      - name: Commit all generated and shell files
         run: |
-          python3 <<'PYEOF'
-          import os, json
-
-          def to_title(s):
-              return s.replace('-', ' ').replace('_', ' ').capitalize()
-
-          # Design System from poetry.html/index.html
-          STYLE = """
-          :root { --white: #ffffff; --off-white: #f7f6f3; --ink: #1a1a1a; --muted: #888; --border: #e4e2dc; --nav-w: 220px; }
-          body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); display: flex; margin: 0; min-height: 100vh; }
-          nav { position: fixed; width: var(--nav-w); height: 100vh; background: var(--off-white); border-right: 1px solid var(--border); padding: 2.5rem 1.5rem; }
-          main { margin-left: var(--nav-w); padding: 4rem 5rem; max-width: 850px; flex: 1; }
-          h1 { font-family: 'DM Serif Display', serif; font-size: 2.8rem; margin-bottom: 2rem; }
-          .back-link { font-size: 0.75rem; color: var(--muted); text-decoration: none; margin-bottom: 1.5rem; display: block; }
-          article { line-height: 1.8; font-size: 1.05rem; }
-          article p { margin-bottom: 1.4rem; }
-          """
-
-          def wrap_content(title, body, back_path="/worldbuilding.html"):
-              return f"""<!DOCTYPE html><html><head><meta charset="UTF-8"><title>{title} | Astatyr</title>
-              <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
-              <style>{STYLE}</style></head><body><nav><a href="/index.html">Home</a></nav>
-              <main><a class="back-link" href="{back_path}">← Back</a><h1>{title}</h1><article>{body}</article></main></body></html>"""
-
-          manifest = {"storylines": [], "characters": [], "geography": []}
-
-          # 1. Build Manifest from folder structure
-          for cat in ["storylines", "characters", "geography"]:
-              root = f"content/{cat}"
-              if not os.path.exists(root): continue
-              if cat == "storylines":
-                  for sl_id in sorted(os.listdir(root)):
-                      sl_path = os.path.join(root, sl_id)
-                      if os.path.isdir(sl_path):
-                          chaps = [{"id": f[:-5], "title": to_title(f[:-5])} for f in sorted(os.listdir(sl_path)) if f.endswith(".docx")]
-                          manifest["storylines"].append({"id": sl_id, "title": to_title(sl_id), "chapters": chaps})
-              else:
-                  for f in sorted(os.listdir(root)):
-                      if f.endswith(".docx"):
-                          manifest[cat].append({"id": f[:-5], "title": to_title(f[:-5])})
-
-          # 2. Inject converted content into styled pages
-          for sl in manifest["storylines"]:
-              for ch in sl["chapters"]:
-                  src = f"generated/storylines/{sl['id']}/{ch['id']}.html"
-                  if os.path.exists(src):
-                      with open(src, "r") as f: body = f.read()
-                      out = f"worldbuilding/storylines/{sl['id']}/{ch['id']}.html"
-                      os.makedirs(os.path.dirname(out), exist_ok=True)
-                      with open(out, "w") as f: f.write(wrap_content(ch['title'], body))
-
-          # Save Manifest
-          os.makedirs("generated", exist_ok=True)
-          with open("generated/manifest.json", "w") as f:
-              json.dump(manifest, f, indent=2)
-          PYEOF
-
-      - name: Commit and Push
-        run: |
-          git config user.name "GitHub Actions"
+          git config user.name  "GitHub Actions"
           git config user.email "actions@github.com"
-          # Use -f to force add in case 'generated' is in .gitignore
-          git add -f generated/manifest.json
-          git add worldbuilding/storylines/
-          git commit -m "Auto-update content [skip ci]" || exit 0
-          git push
+          git add generated/ worldbuilding/
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto-generate pages from content [skip ci]"
+            git push
+          fi
