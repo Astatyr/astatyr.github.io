@@ -1,0 +1,38 @@
+{
+  "storylines": [
+    {
+      "id": "Vrey-Prelude-of-Fear",
+      "title": "Vrey Prelude of Fear",
+      "type": "Storyline",
+      "status": "In Progress",
+      "description": "",
+      "chapters": [
+        {
+          "id": "Chapter_1",
+          "title": "Chapter 1"
+        }
+      ]
+    }
+  ],
+  "characters": [
+    {
+      "id": "template-character",
+      "title": "template character",
+      "role": ""
+    }
+  ],
+  "geography": [
+    {
+      "id": "Vrey",
+      "title": "Vrey",
+      "type": "Location",
+      "description": "",
+      "locations": [
+        {
+          "id": "Chapter_1",
+          "title": "Chapter 1"
+        }
+      ]
+    }
+  ]
+}
