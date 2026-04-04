@@ -395,11 +395,18 @@ if os.path.exists(ch_root):
                     if ':' in line:
                         k, v = line.split(':', 1)
                         meta[k.strip()] = v.strip()
+            # Auto-detect portrait image by matching filename
+            image_url = ""
+            for ext in ["jpg", "jpeg", "png", "webp"]:
+                img_path = f"assets/images/characters/{ch_id}.{ext}"
+                if os.path.exists(img_path):
+                    image_url = f"/assets/images/characters/{ch_id}.{ext}"
+                    break
             manifest['characters'].append({
                 "id": ch_id,
                 "title": meta.get('title', to_title(ch_id)),
                 "role": meta.get('role', ''),
-                "image": meta.get('image', '')
+                "image": image_url
             })
 
 geo_root = "content/geography"
@@ -440,9 +447,9 @@ for root, dirs, files in os.walk("generated"):
         # === Title  →  section divider (h2 styled as section-label)
         # ###  Title  →  serif subheading (h3)
         # ##   Title  →  large serif heading (h1) — for document-level titles
-        html = _re.sub(r'<p>===\s+(.*?)</p>', r'<h2></h2>', html)
-        html = _re.sub(r'<p>###\s+(.*?)</p>', r'<h3></h3>', html)
-        html = _re.sub(r'<p>##\s+(.*?)</p>',  r'<h1></h1>', html)
+        html = _re.sub(r'<p>===\s+(<[^>]+>)?(.*?)(</[^>]+>)?</p>', lambda m: '<h2><span>' + (m.group(2) or '') + '</span></h2>', html)
+        html = _re.sub(r'<p>###\s+(<[^>]+>)?(.*?)(</[^>]+>)?</p>', lambda m: '<h3>' + (m.group(2) or '') + '</h3>', html)
+        html = _re.sub(r'<p>##\s+(<[^>]+>)?(.*?)(</[^>]+>)?</p>',  lambda m: '<h1>' + (m.group(2) or '') + '</h1>', html)
         open(fpath, "w", encoding="utf-8").write(html)
 
 # Fix image paths in all generated HTML files
