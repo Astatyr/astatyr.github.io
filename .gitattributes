@@ -1,0 +1,12 @@
+# Tell Git to treat these as binary — prevents line-ending corruption
+*.docx  binary
+*.docm  binary
+*.xlsx  binary
+*.pptx  binary
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.zip   binary
