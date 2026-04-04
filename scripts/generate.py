@@ -127,6 +127,7 @@ def make_storyline_index():
 <script>
 var parts = window.location.pathname.replace(/\/$/, '').split('/');
 var slId = parts[parts.length - 1];
+if (slId === 'index.html') slId = parts[parts.length - 2];
 async function init() {
   var manifest;
   try { manifest = await (await fetch('/generated/manifest.json')).json(); } catch(e) { return; }
