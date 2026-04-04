@@ -213,6 +213,102 @@ init();
 </script>""" + FOOT
 
 
+def make_character(char_id=""):
+    # Auto-detect portrait image by matching filename
+    portrait_style = ""
+    for ext in ["jpg", "jpeg", "png", "webp"]:
+        img_path = f"assets/images/characters/{char_id}.{ext}"
+        if os.path.exists(img_path):
+            portrait_style = ' style="background-image: url(/assets/images/characters/' + char_id + '.' + ext + ')"'
+            print(f"  Portrait found: {img_path}")
+            break
+
+    html = head() + NAV + """
+<main style="animation:fadeUp .4s ease both">
+  <a class="back-link" href="/worldbuilding.html">&larr; Worldbuilding</a>
+  <div class="char-portrait" id="char-portrait" PORTRAIT_STYLE_PLACEHOLDER></div>
+  <div class="page-title" id="char-name">Loading&hellip;</div>
+  <div class="page-meta" id="char-role-text"></div>
+  <div class="wb-section" style="margin-top:2rem">
+    <div class="section-label">About</div>
+    <div id="char-content" class="doc-content"><p class="loading">Loading&hellip;</p></div>
+  </div>
+</main>
+<script>
+var parts = window.location.pathname.split('/');
+var charId = parts[parts.length - 1].replace('.html', '');
+async function init() {
+  var manifest;
+  try { manifest = await (await fetch('/generated/manifest.json')).json(); } catch(e) {}
+  var ch = manifest && manifest.characters.find(function(c) { return c.id === charId; });
+  if (ch) {
+    document.title = ch.title + ' \u2014 Astatyr';
+    document.getElementById('char-name').textContent = ch.title;
+    document.getElementById('char-role-text').textContent = ch.role || '';
+    document.getElementById('nav-section-title').textContent = 'Characters';
+    document.getElementById('nav-items').innerHTML = manifest.characters.map(function(c) {
+      return '<a class="nav-btn nav-sub-btn' + (c.id === charId ? ' active' : '') + '" href="' + c.id + '.html">' + c.title + '</a>';
+    }).join('');
+  }
+  try {
+    var r = await fetch('/generated/characters/' + charId + '.html');
+    if (r.ok) document.getElementById('char-content').innerHTML = await r.text();
+    else document.getElementById('char-content').innerHTML = '<p class="empty-note">Content not found. Push the .docx and wait for the Action to run.</p>';
+  } catch(e) {}
+}
+init();
+</script>""" + FOOT
+    html = html.replace("PORTRAIT_STYLE_PLACEHOLDER", portrait_style)
+    return html
+
+
+def make_chapter():
+    return head() + NAV + """
+<main style="animation:fadeUp .4s ease both">
+  <a class="back-link" href="/worldbuilding.html">&larr; Worldbuilding</a>
+  <div id="ch-label" class="page-meta">Chapter</div>
+  <div id="ch-title" class="page-title">Loading&hellip;</div>
+  <div style="margin-top:2rem" id="ch-content" class="doc-content"><p class="loading">Loading&hellip;</p></div>
+  <div class="ch-nav" id="ch-nav"></div>
+</main>
+<script>
+var parts = window.location.pathname.replace(/\/$/, '').split('/');
+var chId = parts[parts.length - 1].replace('.html', '');
+var slId = parts[parts.length - 2];
+async function init() {
+  var manifest;
+  try { manifest = await (await fetch('/generated/manifest.json')).json(); } catch(e) {}
+  var sl = manifest && manifest.storylines.find(function(s) { return s.id === slId; });
+  if (sl) {
+    document.title = sl.title + ' \u2014 Astatyr';
+    document.getElementById('nav-section-title').textContent = sl.title;
+    var chIdx = sl.chapters.findIndex(function(c) { return c.id === chId; });
+    var ch = sl.chapters[chIdx];
+    if (ch) {
+      document.getElementById('ch-label').textContent = 'Chapter ' + (chIdx + 1);
+      document.getElementById('ch-title').textContent = ch.title;
+      var ni = '<a class="nav-btn nav-sub-btn" href="index.html">Overview</a>';
+      sl.chapters.forEach(function(c, i) {
+        ni += '<a class="nav-btn nav-sub-btn' + (c.id === chId ? ' active' : '') + '" href="' + c.id + '.html">Ch.' + (i+1) + ' \u2014 ' + c.title + '</a>';
+      });
+      document.getElementById('nav-items').innerHTML = ni;
+      var prev = chIdx > 0 ? sl.chapters[chIdx - 1] : null;
+      var next = chIdx < sl.chapters.length - 1 ? sl.chapters[chIdx + 1] : null;
+      document.getElementById('ch-nav').innerHTML =
+        (prev ? '<a href="' + prev.id + '.html"><span class="dir">&larr; Previous</span><span class="ch-title">' + prev.title + '</span></a>' : '<span></span>') +
+        (next ? '<a class="next" href="' + next.id + '.html"><span class="dir">Next &rarr;</span><span class="ch-title">' + next.title + '</span></a>' : '<span></span>');
+    }
+  }
+  try {
+    var r = await fetch('/generated/storylines/' + slId + '/' + chId + '.html');
+    if (r.ok) document.getElementById('ch-content').innerHTML = await r.text();
+    else document.getElementById('ch-content').innerHTML = '<p class="empty-note">Content not found. Push the .docx and wait for the Action to run.</p>';
+  } catch(e) {}
+}
+init();
+</script>""" + FOOT
+
+
 def make_character():
     return head() + NAV + """
 <main style="animation:fadeUp .4s ease both">
@@ -341,7 +437,8 @@ if os.path.exists(ch_root):
             manifest['characters'].append({
                 "id": ch_id,
                 "title": meta.get('title', to_title(ch_id)),
-                "role": meta.get('role', '')
+                "role": meta.get('role', ''),
+                "image": meta.get('image', '')
             })
 
 geo_root = "content/geography"
@@ -407,7 +504,7 @@ for sl in manifest['storylines']:
         write_page(f"{sl_dir}/{ch['id']}.html", make_chapter())
 
 for char in manifest['characters']:
-    write_page(f"worldbuilding/characters/{char['id']}.html", make_character())
+    write_page(f"worldbuilding/characters/{char['id']}.html", make_character(char['id']))
 
 for geo in manifest['geography']:
     write_page(f"worldbuilding/geography/{geo['id']}/index.html", make_location())
