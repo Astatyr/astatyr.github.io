@@ -16,8 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: |
-          sudo apt-get install -y pandoc optipng jpegoptim
+        run: sudo apt-get install -y pandoc optipng jpegoptim
 
       - name: Convert all DOCX files to HTML (with image extraction)
         run: |
@@ -26,30 +25,28 @@ jobs:
             html_file="${html_file%.docx}.html"
             mkdir -p "$(dirname "$html_file")"
 
-            pandoc "$docx_file" \
+            if pandoc "$docx_file" \
               --from docx \
               --to html \
               --no-highlight \
               --wrap=none \
               --extract-media="generated/media" \
-              -o "$html_file"
-
-            echo "Converted: $docx_file -> $html_file"
+              -o "$html_file"; then
+              echo "OK: $docx_file"
+            else
+              echo "SKIPPED (corrupt or invalid): $docx_file"
+            fi
           done
 
       - name: Compress extracted images
         run: |
           if [ -d "generated/media" ]; then
-            echo "Compressing PNGs..."
             find generated/media -name "*.png" -exec optipng -quiet -o2 {} \;
-
-            echo "Compressing JPEGs..."
-            find generated/media -name "*.jpg" -o -name "*.jpeg" | \
+            find generated/media \( -name "*.jpg" -o -name "*.jpeg" \) | \
               xargs -r jpegoptim --quiet --max=85
-
             echo "Image compression done."
           else
-            echo "No media folder found, skipping compression."
+            echo "No media found, skipping."
           fi
 
       - name: Generate manifest and shell pages
