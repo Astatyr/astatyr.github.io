@@ -472,4 +472,64 @@ for char in manifest['characters']:
 for geo in manifest['geography']:
     write_page(f"worldbuilding/geography/{geo['id']}/index.html", make_location())
 
+
+# ── garbage collection ────────────────────────────────────────────────────────
+print("\nRunning garbage collection...")
+
+# Build sets of what SHOULD exist based on the manifest
+expected_generated = set()
+expected_shell = set()
+
+for sl in manifest["storylines"]:
+    expected_generated.add(f"generated/storylines/{sl['id']}/index.html")
+    expected_shell.add(f"worldbuilding/storylines/{sl['id']}/index.html")
+    for ch in sl["chapters"]:
+        expected_generated.add(f"generated/storylines/{sl['id']}/{ch['id']}.html")
+        expected_shell.add(f"worldbuilding/storylines/{sl['id']}/{ch['id']}.html")
+
+for char in manifest["characters"]:
+    expected_generated.add(f"generated/characters/{char['id']}.html")
+    expected_shell.add(f"worldbuilding/characters/{char['id']}.html")
+
+for geo in manifest["geography"]:
+    expected_generated.add(f"generated/geography/{geo['id']}/index.html")
+    expected_shell.add(f"worldbuilding/geography/{geo['id']}/index.html")
+    for loc in geo["locations"]:
+        expected_generated.add(f"generated/geography/{geo['id']}/{loc['id']}.html")
+        expected_shell.add(f"worldbuilding/geography/{geo['id']}/{loc['id']}.html")
+
+def collect_html_files(root):
+    found = set()
+    if not os.path.exists(root):
+        return found
+    for dirpath, dirs, files in os.walk(root):
+        # Skip the media folder
+        dirs[:] = [d for d in dirs if d != "media"]
+        for f in files:
+            if f.endswith(".html"):
+                found.add(os.path.join(dirpath, f).replace(os.sep, "/"))
+    return found
+
+actual_generated = collect_html_files("generated")
+actual_shell = collect_html_files("worldbuilding")
+
+# Don't delete manifest.json or worldbuilding.html itself
+stale_generated = actual_generated - expected_generated
+stale_shell = actual_shell - expected_shell
+
+for path in sorted(stale_generated | stale_shell):
+    os.remove(path)
+    print(f"  Deleted stale: {path}")
+    # Remove empty parent dirs
+    parent = os.path.dirname(path)
+    try:
+        if os.path.isdir(parent) and not os.listdir(parent):
+            os.rmdir(parent)
+            print(f"  Removed empty dir: {parent}")
+    except Exception:
+        pass
+
+if not stale_generated and not stale_shell:
+    print("  Nothing to clean up.")
+
 print("Done.")

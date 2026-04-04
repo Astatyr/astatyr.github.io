@@ -148,7 +148,7 @@
       }
       el.innerHTML = characters.map(c => `
         <a class="char-card" href="/worldbuilding/characters/${c.id}.html">
-          <div class="char-img"></div>
+          <div class="char-img" style="${c.image ? 'background-image: url(' + c.image + ')' : ''}"></div>
           <div class="char-info">
             <div class="char-name">${c.title}</div>
             <div class="char-role">${c.role || ''}</div>
