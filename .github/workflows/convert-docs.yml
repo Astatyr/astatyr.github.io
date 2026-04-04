@@ -15,18 +15,42 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install Pandoc
-        run: sudo apt-get install -y pandoc
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y pandoc optipng jpegoptim
 
-      - name: Convert all DOCX files to HTML
+      - name: Convert all DOCX files to HTML (with image extraction)
         run: |
           find content -name "*.docx" | while read docx_file; do
             html_file="${docx_file/content\//generated/}"
             html_file="${html_file%.docx}.html"
             mkdir -p "$(dirname "$html_file")"
-            pandoc "$docx_file" --from docx --to html --no-highlight --wrap=none -o "$html_file"
+
+            pandoc "$docx_file" \
+              --from docx \
+              --to html \
+              --no-highlight \
+              --wrap=none \
+              --extract-media="generated/media" \
+              -o "$html_file"
+
             echo "Converted: $docx_file -> $html_file"
           done
+
+      - name: Compress extracted images
+        run: |
+          if [ -d "generated/media" ]; then
+            echo "Compressing PNGs..."
+            find generated/media -name "*.png" -exec optipng -quiet -o2 {} \;
+
+            echo "Compressing JPEGs..."
+            find generated/media -name "*.jpg" -o -name "*.jpeg" | \
+              xargs -r jpegoptim --quiet --max=85
+
+            echo "Image compression done."
+          else
+            echo "No media folder found, skipping compression."
+          fi
 
       - name: Generate manifest and shell pages
         run: python3 scripts/generate.py

@@ -54,9 +54,14 @@ main { margin-left: var(--nav-w); flex: 1; padding: 4rem 5rem; max-width: 820px;
 .doc-content strong { font-weight: 500; color: var(--ink); }
 .doc-content em { font-style: italic; }
 .doc-content blockquote { border-left: 2px solid var(--border); padding-left: 1.2rem; margin: 1rem 0; color: #666; font-style: italic; }
-.doc-content table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.84rem; }
-.doc-content th { font-weight: 500; text-align: left; padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); }
-.doc-content td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); color: #444; font-weight: 300; }
+.doc-content table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.87rem; border: 1px solid var(--border); }
+.doc-content th { font-weight: 500; text-align: center; padding: 0.4rem 0.8rem; border: 1px solid var(--border); background: var(--off-white); color: var(--ink); }
+.doc-content td { padding: 0.4rem 0.8rem; border: 1px solid var(--border); color: #3a3a3a; font-weight: 300; vertical-align: top; }
+.doc-content td p { margin-bottom: 0.4rem; font-size: 0.87rem; }
+.doc-content td p:last-child { margin-bottom: 0; }
+.doc-content td ul, .doc-content td ol { margin-bottom: 0.4rem; }
+.doc-content table table { margin-bottom: 0; border: 1px solid var(--border); }
+.doc-content tr:last-child td { border-bottom: 1px solid var(--border); }
 .doc-content > *:first-child { margin-top: 0; }
 .chapter-list { display: flex; flex-direction: column; gap: 0.6rem; }
 .chapter-link { display: flex; align-items: center; padding: 1rem 1.2rem; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--ink); transition: box-shadow 0.2s, transform 0.2s; background: var(--white); gap: 1rem; }
@@ -362,6 +367,33 @@ os.makedirs("generated", exist_ok=True)
 with open("generated/manifest.json", "w", encoding='utf-8') as f:
     json.dump(manifest, f, indent=2)
 print("manifest.json written.")
+
+# Fix image paths in all generated HTML files
+# Pandoc writes src="generated/media/..." but served from a subpath,
+# the browser resolves it relative to the HTML file location.
+# We rewrite to absolute /generated/media/... paths.
+import re
+for root, dirs, files in os.walk("generated"):
+    for fname in files:
+        if not fname.endswith(".html"):
+            continue
+        fpath = os.path.join(root, fname)
+        html = open(fpath, encoding="utf-8").read()
+        # Rewrite any src that points into generated/media
+        fixed = re.sub(
+            r'src="(?:\.\.\/)*generated\/media\/',
+            'src="/generated/media/',
+            html
+        )
+        # Also handle pandoc sometimes writing just media/
+        fixed = re.sub(
+            r'src="media\/',
+            'src="/generated/media/',
+            fixed
+        )
+        if fixed != html:
+            open(fpath, "w", encoding="utf-8").write(fixed)
+            print(f"  Fixed image paths: {fpath}")
 print(json.dumps(manifest, indent=2))
 
 # ── generate shell pages ──────────────────────────────────────────────────────
