@@ -309,43 +309,6 @@ init();
 </script>""" + FOOT
 
 
-def make_character():
-    return head() + NAV + """
-<main style="animation:fadeUp .4s ease both">
-  <a class="back-link" href="/worldbuilding.html">&larr; Worldbuilding</a>
-  <div class="char-portrait" id="char-portrait"></div>
-  <div class="page-title" id="char-name">Loading&hellip;</div>
-  <div class="page-meta" id="char-role-text"></div>
-  <div class="wb-section" style="margin-top:2rem">
-    <div class="section-label">About</div>
-    <div id="char-content" class="doc-content"><p class="loading">Loading&hellip;</p></div>
-  </div>
-</main>
-<script>
-var parts = window.location.pathname.split('/');
-var charId = parts[parts.length - 1].replace('.html', '');
-async function init() {
-  var manifest;
-  try { manifest = await (await fetch('/generated/manifest.json')).json(); } catch(e) {}
-  var ch = manifest && manifest.characters.find(function(c) { return c.id === charId; });
-  if (ch) {
-    document.title = ch.title + ' \u2014 Astatyr';
-    document.getElementById('char-name').textContent = ch.title;
-    document.getElementById('char-role-text').textContent = ch.role || '';
-    document.getElementById('nav-section-title').textContent = 'Characters';
-    document.getElementById('nav-items').innerHTML = manifest.characters.map(function(c) {
-      return '<a class="nav-btn nav-sub-btn' + (c.id === charId ? ' active' : '') + '" href="' + c.id + '.html">' + c.title + '</a>';
-    }).join('');
-  }
-  try {
-    var r = await fetch('/generated/characters/' + charId + '.html');
-    if (r.ok) document.getElementById('char-content').innerHTML = await r.text();
-    else document.getElementById('char-content').innerHTML = '<p class="empty-note">Content not found. Push the .docx and wait for the Action to run.</p>';
-  } catch(e) {}
-}
-init();
-</script>""" + FOOT
-
 
 def make_location():
     return head() + """<nav>
