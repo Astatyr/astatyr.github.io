@@ -308,8 +308,17 @@ init();
 
 
 
-def make_location():
-    return head() + """<nav>
+def make_location(geo_id=""):
+    # Auto-detect banner image by matching geography folder name
+    banner_style = ""
+    for ext in ["jpg", "jpeg", "png", "webp"]:
+        img_path = f"assets/images/geography/{geo_id}.{ext}"
+        if os.path.exists(img_path):
+            banner_style = ' style="background-image: url(/assets/images/geography/' + geo_id + '.' + ext + ')"'
+            print(f"  Location image found: {img_path}")
+            break
+
+    html = head() + """<nav>
   <a class="nav-logo" href="/">Astatyr<span>Hub Page</span></a>
   <a class="nav-btn" href="/worldbuilding">&#127758; Worldbuilding</a>
   <div class="nav-divider"></div>
@@ -318,7 +327,7 @@ def make_location():
   <div class="nav-footer">&copy; 2025 Justin Adrian Halim</div>
 </nav>
 <main style="padding:0;max-width:none;margin-left:var(--nav-w)">
-  <div class="loc-banner">
+  <div class="loc-banner" id="loc-banner" LOC_BANNER_PLACEHOLDER>
     <div class="loc-banner-overlay"></div>
     <div class="loc-banner-title">
       <div class="loc-type-label" id="loc-type">Location</div>
@@ -330,6 +339,10 @@ def make_location():
     <div class="wb-section">
       <div class="section-label">Overview</div>
       <div id="loc-content" class="doc-content"><p class="loading">Loading&hellip;</p></div>
+    </div>
+    <div class="wb-section" id="cities-section" style="display:none">
+      <div class="section-label">Cities &amp; Locations</div>
+      <div id="cities-grid" class="loc-grid"></div>
     </div>
   </div>
 </main>
@@ -348,6 +361,15 @@ async function init() {
     document.getElementById('nav-items').innerHTML = manifest.geography.map(function(g) {
       return '<a class="nav-btn nav-sub-btn' + (g.id === geoId ? ' active' : '') + '" href="/worldbuilding/geography/' + g.id + '/">' + g.title + '</a>';
     }).join('');
+    if (geo.locations && geo.locations.length > 0) {
+      document.getElementById('cities-section').style.display = 'block';
+      document.getElementById('cities-grid').innerHTML = geo.locations.map(function(loc) {
+        return '<a class="loc-card" href="/worldbuilding/geography/' + geoId + '/' + loc.id + '.html">'
+          + '<div class="loc-img"></div>'
+          + '<div class="loc-info"><div class="loc-type">Location</div>'
+          + '<div class="loc-name">' + loc.title + '</div></div></a>';
+      }).join('');
+    }
   }
   try {
     var r = await fetch('/generated/geography/' + geoId + '/index.html');
@@ -356,8 +378,84 @@ async function init() {
   } catch(e) {}
 }
 init();
-</script>""" + FOOT
+</script>"""
+    html = html.replace("LOC_BANNER_PLACEHOLDER", banner_style)
+    return html
 
+
+
+def make_city(geo_id="", city_id=""):
+    # Auto-detect banner image for this city
+    banner_style = ""
+    for ext in ["jpg", "jpeg", "png", "webp"]:
+        img_path = f"assets/images/geography/{geo_id}-{city_id}.{ext}"
+        if os.path.exists(img_path):
+            banner_style = ' style="background-image: url(/assets/images/geography/' + geo_id + '-' + city_id + '.' + ext + ')"'
+            print(f"  City image found: {img_path}")
+            break
+
+    html = head() + """<nav>
+  <a class="nav-logo" href="/">Astatyr<span>Hub Page</span></a>
+  <a class="nav-btn" href="/worldbuilding">&#127758; Worldbuilding</a>
+  <div class="nav-divider"></div>
+  <div class="nav-section-label" id="nav-section-title">Geography</div>
+  <div id="nav-items"></div>
+  <div class="nav-footer">&copy; 2025 Justin Adrian Halim</div>
+</nav>
+<main style="padding:0;max-width:none;margin-left:var(--nav-w)">
+  <div class="loc-banner" CITY_BANNER_PLACEHOLDER>
+    <div class="loc-banner-overlay"></div>
+    <div class="loc-banner-title">
+      <div class="loc-type-label" id="city-type">City</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:2.2rem;letter-spacing:-.03em" id="city-name">Loading&hellip;</div>
+    </div>
+  </div>
+  <div class="content-area">
+    <div id="breadcrumb" style="margin-bottom:1.5rem;font-size:.75rem;color:var(--muted)">
+      <a href="/worldbuilding" style="color:var(--muted);text-decoration:none">Worldbuilding</a>
+      <span style="margin:0 .4rem">/</span>
+      <a id="country-link" href="#" style="color:var(--muted);text-decoration:none">Country</a>
+      <span style="margin:0 .4rem">/</span>
+      <span id="city-breadcrumb">City</span>
+    </div>
+    <div class="wb-section">
+      <div class="section-label">Overview</div>
+      <div id="city-content" class="doc-content"><p class="loading">Loading&hellip;</p></div>
+    </div>
+  </div>
+</main>
+<script>
+var parts = window.location.pathname.replace(/\/$/, '').split('/');
+var cityId = parts[parts.length - 1].replace('.html', '');
+var geoId  = parts[parts.length - 2];
+async function init() {
+  var manifest;
+  try { manifest = await (await fetch('/generated/manifest.json')).json(); } catch(e) {}
+  var geo = manifest && manifest.geography.find(function(g) { return g.id === geoId; });
+  var city = geo && geo.locations.find(function(l) { return l.id === cityId; });
+  if (geo && city) {
+    document.title = city.title + ' \u2014 Astatyr';
+    document.getElementById('city-name').textContent = city.title;
+    document.getElementById('city-breadcrumb').textContent = city.title;
+    document.getElementById('country-link').textContent = geo.title;
+    document.getElementById('country-link').href = '/worldbuilding/geography/' + geoId + '/';
+    document.getElementById('nav-section-title').textContent = geo.title;
+    var ni = '<a class="nav-btn nav-sub-btn" href="/worldbuilding/geography/' + geoId + '/">Overview</a>';
+    geo.locations.forEach(function(l) {
+      ni += '<a class="nav-btn nav-sub-btn' + (l.id === cityId ? ' active' : '') + '" href="' + l.id + '.html">' + l.title + '</a>';
+    });
+    document.getElementById('nav-items').innerHTML = ni;
+  }
+  try {
+    var r = await fetch('/generated/geography/' + geoId + '/' + cityId + '.html');
+    if (r.ok) document.getElementById('city-content').innerHTML = await r.text();
+    else document.getElementById('city-content').innerHTML = '<p class="empty-note">Content not found. Push ' + cityId + '.docx to content/geography/' + geoId + '/ and wait for the Action.</p>';
+  } catch(e) {}
+}
+init();
+</script>"""
+    html = html.replace("CITY_BANNER_PLACEHOLDER", banner_style)
+    return html
 
 # ── build manifest ────────────────────────────────────────────────────────────
 
@@ -494,7 +592,9 @@ for char in manifest['characters']:
     write_page(f"worldbuilding/characters/{char['id']}.html", make_character(char['id']))
 
 for geo in manifest['geography']:
-    write_page(f"worldbuilding/geography/{geo['id']}/index.html", make_location())
+    write_page(f"worldbuilding/geography/{geo['id']}/index.html", make_location(geo['id']))
+    for loc in geo['locations']:
+        write_page(f"worldbuilding/geography/{geo['id']}/{loc['id']}.html", make_city(geo['id'], loc['id']))
 
 
 # ── garbage collection ────────────────────────────────────────────────────────
@@ -518,6 +618,9 @@ for char in manifest["characters"]:
 for geo in manifest["geography"]:
     expected_generated.add(f"generated/geography/{geo['id']}/index.html")
     expected_shell.add(f"worldbuilding/geography/{geo['id']}/index.html")
+    for loc in geo['locations']:
+        expected_generated.add(f"generated/geography/{geo['id']}/{loc['id']}.html")
+        expected_shell.add(f"worldbuilding/geography/{geo['id']}/{loc['id']}.html")
     for loc in geo["locations"]:
         expected_generated.add(f"generated/geography/{geo['id']}/{loc['id']}.html")
         expected_shell.add(f"worldbuilding/geography/{geo['id']}/{loc['id']}.html")
