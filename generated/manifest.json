@@ -20,9 +20,10 @@
   ],
   "characters": [
     {
-      "id": "template-character",
-      "title": "template character",
-      "role": ""
+      "id": "placeholder",
+      "title": "placeholder",
+      "role": "",
+      "image": ""
     }
   ],
   "geography": [
