@@ -15,14 +15,12 @@ def read_meta(folder):
                 meta[k.strip()] = v.strip()
     return meta
 
-def write_if_missing(path, content):
-    if not os.path.exists(path):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, 'w', encoding='utf-8') as f:
-            f.write(content)
-        print(f"  Created: {path}")
+def write_page(path, content):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
     else:
-        print(f"  Exists (skipped): {path}")
+    print(f"  Written: {path}")
 
 # ── shared pieces ─────────────────────────────────────────────────────────────
 
@@ -372,14 +370,14 @@ print("\nGenerating shell pages...")
 
 for sl in manifest['storylines']:
     sl_dir = f"worldbuilding/storylines/{sl['id']}"
-    write_if_missing(f"{sl_dir}/index.html", make_storyline_index())
+    write_page(f"{sl_dir}/index.html", make_storyline_index())
     for ch in sl['chapters']:
-        write_if_missing(f"{sl_dir}/{ch['id']}.html", make_chapter())
+        write_page(f"{sl_dir}/{ch['id']}.html", make_chapter())
 
 for char in manifest['characters']:
-    write_if_missing(f"worldbuilding/characters/{char['id']}.html", make_character())
+    write_page(f"worldbuilding/characters/{char['id']}.html", make_character())
 
 for geo in manifest['geography']:
-    write_if_missing(f"worldbuilding/geography/{geo['id']}/index.html", make_location())
+    write_page(f"worldbuilding/geography/{geo['id']}/index.html", make_location())
 
 print("Done.")
