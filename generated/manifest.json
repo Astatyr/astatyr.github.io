@@ -32,10 +32,15 @@
       "title": "Vrey",
       "type": "Location",
       "description": "",
+      "image": "/assets/images/geography/Vrey.jpg",
       "locations": [
         {
           "id": "Bitburg",
           "title": "Bitburg"
+        },
+        {
+          "id": "~$index",
+          "title": "~$index"
         }
       ]
     }
