@@ -1,0 +1,14 @@
+# Cache images and fonts aggressively — they rarely change
+/assets/images/*
+  Cache-Control: public, max-age=2592000
+
+/generated/media/*
+  Cache-Control: public, max-age=2592000
+
+# Cache generated HTML for a short time — it changes when you push
+/generated/*
+  Cache-Control: public, max-age=300
+
+# Don't cache manifest.json — needs to be fresh
+/generated/manifest.json
+  Cache-Control: no-cache

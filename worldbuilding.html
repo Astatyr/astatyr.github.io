@@ -165,7 +165,7 @@
       }
       el.innerHTML = geography.map(g => `
         <a class="loc-card" href="/worldbuilding/geography/${g.id}/">
-          <div class="loc-img"></div>
+          <div class="loc-img" style="${g.image ? 'background-image: url(' + g.image + ')' : ''}"></div>
           <div class="loc-info">
             <div class="loc-type">${g.type}</div>
             <div class="loc-name">${g.title}</div>

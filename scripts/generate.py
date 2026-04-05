@@ -518,11 +518,18 @@ if os.path.exists(geo_root):
         for f in sorted(os.listdir(country_path)):
             if f.endswith('.docx') and f.lower() != 'index.docx' and not f.startswith('_'):
                 locations.append({"id": f[:-5], "title": to_title(f[:-5])})
+        # Auto-detect banner image
+        geo_image = ""
+        for ext in ["jpg", "jpeg", "png", "webp"]:
+            if os.path.exists(f"assets/images/geography/{country_name}.{ext}"):
+                geo_image = f"/assets/images/geography/{country_name}.{ext}"
+                break
         manifest['geography'].append({
             "id": country_name,
             "title": meta.get('title', to_title(country_name)),
             "type": meta.get('type', 'Location'),
             "description": meta.get('description', ''),
+            "image": geo_image,
             "locations": locations
         })
 
