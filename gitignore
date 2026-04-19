@@ -1,0 +1,22 @@
+# ── Local dev tools (never push) ──────────────────────────────────────────────
+serve.py
+
+# ── Word document source folders ──────────────────────────────────────────────
+# Content is authored here locally and pushed to content/ when ready
+Worldbuilding-Drafts/
+Writing-Drafts/
+*.tmp
+
+# ── Python cache ──────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+
+# ── OS files ──────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor folders ────────────────────────────────────────────────────────────
+.vscode/
+.idea/

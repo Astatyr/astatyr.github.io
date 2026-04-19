@@ -28,6 +28,14 @@
   ],
   "geography": [
     {
+      "id": "Ur",
+      "title": "Ur",
+      "type": "Location",
+      "description": "",
+      "image": "",
+      "locations": []
+    },
+    {
       "id": "Vrey",
       "title": "Vrey",
       "type": "Location",
@@ -36,9 +44,18 @@
       "locations": [
         {
           "id": "Bitburg",
-          "title": "Bitburg"
+          "title": "Bitburg",
+          "image": ""
         }
       ]
+    },
+    {
+      "id": "Yonga",
+      "title": "Yonga",
+      "type": "Location",
+      "description": "",
+      "image": "",
+      "locations": []
     }
   ]
 }

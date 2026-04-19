@@ -1,11 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Astatyr</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+"""
+css_provider.py: Single source for all shared CSS and HTML fragments.
+
+Change styles here and every generated page updates on next Action run.
+"""
+
+
+FONTS = (
+    '<link rel="preconnect" href="https://fonts.googleapis.com"/>'
+    '<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display'
+    ':ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>'
+)
+
+
+CSS = """\
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --white: #ffffff;
   --off-white: #f7f6f3;
@@ -123,31 +131,4 @@ main { margin-left: var(--nav-w); flex: 1; padding: 4rem 5rem; max-width: 820px;
   main { margin-left: 0; padding: 2rem 1.5rem; }
   .content-area { padding: 2rem 1.5rem; }
 }
-</style>
-</head>
-<body>
-<nav>
-  <a class="nav-logo" href="/">Astatyr<span>Hub Page</span></a>
-  <a class="nav-btn" href="/worldbuilding">&#127758; Worldbuilding</a>
-  <div class="nav-divider"></div>
-  <div class="nav-section-label" id="nav-section-title">Loading...</div>
-  <div id="nav-items"></div>
-  <div class="nav-footer">&copy; 2025 Justin Adrian Halim</div>
-</nav>
-<main style="animation:fadeUp .4s ease both">
-  <a class="back-link" href="/worldbuilding">&larr; Worldbuilding</a>
-  <div class="char-portrait" id="char-portrait" style="background-image: url(/assets/images/characters/placeholder.jpg)"></div>
-  <div class="page-title" id="char-name">Loading&hellip;</div>
-  <div class="page-meta" id="char-role-text"></div>
-  <div class="wb-section" style="margin-top:2rem">
-    <div class="section-label">About</div>
-    <div id="char-content" class="doc-content"><p class="loading">Loading&hellip;</p></div>
-  </div>
-</main>
-  <script src="/assets/js/manifest-store.js"></script>
-  <script src="/assets/js/nav-builder.js"></script>
-  <script src="/assets/js/content-loader.js"></script>
-  <script src="/assets/js/character-page.js"></script>
-  <script>new CharacterPage().init();</script>
-</body>
-</html>
+"""
