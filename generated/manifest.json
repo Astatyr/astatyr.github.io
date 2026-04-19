@@ -28,14 +28,6 @@
   ],
   "geography": [
     {
-      "id": "Ur",
-      "title": "Ur",
-      "type": "Location",
-      "description": "",
-      "image": "",
-      "locations": []
-    },
-    {
       "id": "Vrey",
       "title": "Vrey",
       "type": "Location",
@@ -48,14 +40,6 @@
           "image": ""
         }
       ]
-    },
-    {
-      "id": "Yonga",
-      "title": "Yonga",
-      "type": "Location",
-      "description": "",
-      "image": "",
-      "locations": []
     }
   ]
 }
