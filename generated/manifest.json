@@ -20,6 +20,30 @@
   ],
   "characters": [
     {
+      "id": "Alfred of Vrey",
+      "title": "Alfred of Vrey",
+      "role": "",
+      "image": ""
+    },
+    {
+      "id": "Emilia of Vrey",
+      "title": "Emilia of Vrey",
+      "role": "",
+      "image": ""
+    },
+    {
+      "id": "Mira",
+      "title": "Mira",
+      "role": "",
+      "image": ""
+    },
+    {
+      "id": "Rosa",
+      "title": "Rosa",
+      "role": "",
+      "image": ""
+    },
+    {
       "id": "placeholder",
       "title": "placeholder",
       "role": "",
@@ -27,6 +51,14 @@
     }
   ],
   "geography": [
+    {
+      "id": "Ur",
+      "title": "Ur",
+      "type": "Location",
+      "description": "",
+      "image": "",
+      "locations": []
+    },
     {
       "id": "Vrey",
       "title": "Vrey",
@@ -40,6 +72,14 @@
           "image": ""
         }
       ]
+    },
+    {
+      "id": "Yonga",
+      "title": "Yonga",
+      "type": "Location",
+      "description": "",
+      "image": "",
+      "locations": []
     }
   ]
 }

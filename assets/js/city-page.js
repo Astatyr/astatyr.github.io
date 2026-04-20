@@ -6,8 +6,8 @@
 
 class CityPage extends PageController {
   async setup(manifest) {
-    const cityId = this.currentId;
-    const geoId  = this.parentId;
+    const cityId = decodeURIComponent(this.currentId);
+    const geoId  = decodeURIComponent(this.parentId);
 
     const geo  = manifest.geography.find(g => g.id === geoId);
     const city = geo && geo.locations.find(l => l.id === cityId);

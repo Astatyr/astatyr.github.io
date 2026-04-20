@@ -6,7 +6,7 @@
 
 class CharacterPage extends PageController {
   async setup(manifest) {
-    const charId = this.currentId;
+    const charId = decodeURIComponent(this.currentId);
     const char = manifest.characters.find(c => c.id === charId);
 
     if (!char) {

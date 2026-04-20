@@ -6,7 +6,7 @@
 
 class StorylinePage extends PageController {
   async setup(manifest) {
-    const slId = this.currentId === 'index' ? this.parentId : this.currentId;
+    const slId = decodeURIComponent(this.currentId === 'index' ? this.parentId : this.currentId);
     const sl = manifest.storylines.find(s => s.id === slId);
 
     if (!sl) {

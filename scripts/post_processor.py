@@ -36,6 +36,7 @@ class PostProcessor:
 
     def _process(self, html: str) -> str:
         html = self._convert_headings(html)
+        html = self._convert_bullets(html)
         html = self._fix_image_paths(html)
         return html
 
@@ -56,10 +57,33 @@ class PostProcessor:
          lambda m: f'<h1>{m.group(1)}</h1>'),
     ]
 
+    # Bullet list patterns
+    # Groups consecutive "- item" paragraphs into a single <ul>
+    _BULLET_PATTERN = re.compile(
+        r'(?:<p>- (?:<[^>]+>)?(.*?)(?:</[^>]+>)?</p>\n?)+',
+        re.DOTALL
+    )
+    _BULLET_ITEM = re.compile(r'<p>- (?:<[^>]+>)?(.*?)(?:</[^>]+>)?</p>')
+
     def _convert_headings(self, html: str) -> str:
         for pattern, replacement in self._HEADING_PATTERNS:
             html = pattern.sub(replacement, html)
         return html
+
+    # ── bullet list conversion ───────────────────────────────────────────────
+
+    def _convert_bullets(self, html: str) -> str:
+        """
+        Convert consecutive <p>- item</p> lines into a proper <ul> list.
+        Handles optional bold/italic wrappers around the text.
+        """
+        def make_list(match):
+            block = match.group(0)
+            items = self._BULLET_ITEM.findall(block)
+            lis = ''.join(f'<li>{item}</li>' for item in items)
+            return f'<ul>{lis}</ul>'
+
+        return self._BULLET_PATTERN.sub(make_list, html)
 
     # ── image path fixing ─────────────────────────────────────────────────────
 

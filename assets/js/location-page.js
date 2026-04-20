@@ -6,7 +6,7 @@
 
 class LocationPage extends PageController {
   async setup(manifest) {
-    const geoId = this.currentId === 'index' ? this.parentId : this.currentId;
+    const geoId = decodeURIComponent(this.currentId === 'index' ? this.parentId : this.currentId);
     const geo = manifest.geography.find(g => g.id === geoId);
 
     if (!geo) {

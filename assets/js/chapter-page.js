@@ -6,8 +6,8 @@
 
 class ChapterPage extends PageController {
   async setup(manifest) {
-    const chId = this.currentId;
-    const slId = this.parentId;
+    const chId = decodeURIComponent(this.currentId);
+    const slId = decodeURIComponent(this.parentId);
 
     const sl = manifest.storylines.find(s => s.id === slId);
     if (!sl) {
