@@ -32,6 +32,12 @@
       "image": ""
     },
     {
+      "id": "Leonidas-of-HMC",
+      "title": "Leonidas of HMC",
+      "role": "",
+      "image": ""
+    },
+    {
       "id": "Mira",
       "title": "Mira",
       "role": "",
@@ -40,6 +46,18 @@
     {
       "id": "Rosa",
       "title": "Rosa",
+      "role": "",
+      "image": ""
+    },
+    {
+      "id": "Sapphire",
+      "title": "Sapphire",
+      "role": "",
+      "image": ""
+    },
+    {
+      "id": "Selena",
+      "title": "Selena",
       "role": "",
       "image": ""
     },
