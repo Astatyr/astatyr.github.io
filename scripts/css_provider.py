@@ -1,5 +1,5 @@
 """
-css_provider.py: Single source for all shared CSS and HTML fragments.
+css_provider.py — Single source of truth for all shared CSS and HTML fragments.
 
 Change styles here and every generated page updates on next Action run.
 """
@@ -7,8 +7,7 @@ Change styles here and every generated page updates on next Action run.
 
 FONTS = (
     '<link rel="preconnect" href="https://fonts.googleapis.com"/>'
-    '<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display'
-    ':ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>'
+    '<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>'
 )
 
 
@@ -62,6 +61,8 @@ main { margin-left: var(--nav-w); flex: 1; padding: 4rem 5rem; max-width: 820px;
 .doc-content li { font-size: 0.9rem; color: #3a3a3a; line-height: 1.8; font-weight: 300; margin-bottom: 0.3rem; }
 .doc-content strong { font-weight: 500; color: var(--ink); }
 .doc-content em { font-style: italic; }
+.doc-content a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border); transition: border-color 0.15s; }
+.doc-content a:hover { border-color: var(--ink); }
 .doc-content blockquote { border-left: 2px solid var(--border); padding-left: 1.2rem; margin: 1rem 0; color: #666; font-style: italic; }
 .doc-content table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.87rem; border: 1px solid var(--border); }
 .doc-content th { font-weight: 500; text-align: center; padding: 0.4rem 0.8rem; border: 1px solid var(--border); background: var(--off-white); color: var(--ink); }

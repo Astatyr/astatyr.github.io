@@ -37,6 +37,7 @@ class PostProcessor:
     def _process(self, html: str) -> str:
         html = self._convert_headings(html)
         html = self._convert_bullets(html)
+        html = self._convert_links(html)
         html = self._fix_image_paths(html)
         return html
 
@@ -84,6 +85,36 @@ class PostProcessor:
             return f'<ul>{lis}</ul>'
 
         return self._BULLET_PATTERN.sub(make_list, html)
+
+    # ── markdown link conversion ─────────────────────────────────────────────
+    # [Text](url) → <a href="url">Text</a>
+    #
+    # Base path for worldbuilding-internal links.
+    # Links WITHOUT a leading slash are treated as internal:
+    #   [Mira](characters/Mira)      → /worldbuilding/characters/Mira
+    #   [Vrey](geography/Vrey/)      → /worldbuilding/geography/Vrey/
+    #
+    # Links WITH a leading slash or http are left as-is (external/cross-site):
+    #   [Poetry](/poetry)            → /poetry
+    #   [Site](https://example.com)  → https://example.com
+    #
+    # TO MIGRATE TO OWN REPO: change WB_BASE to '' and deploy.
+    # Internal links will then resolve from the repo root with no prefix.
+
+    WB_BASE = '/worldbuilding'
+
+    _LINK_PATTERN = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+
+    def _convert_links(self, html: str) -> str:
+        def make_link(m):
+            text = m.group(1)
+            url  = m.group(2)
+            # External or absolute links — leave unchanged
+            if url.startswith('/') or url.startswith('http'):
+                return f'<a href="{url}">{text}</a>'
+            # Internal worldbuilding link — prepend base path
+            return f'<a href="{self.WB_BASE}/{url}">{text}</a>'
+        return self._LINK_PATTERN.sub(make_link, html)
 
     # ── image path fixing ─────────────────────────────────────────────────────
 
