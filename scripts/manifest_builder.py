@@ -50,7 +50,7 @@ class ManifestBuilder:
         if not os.path.exists(root):
             return
         for fname in sorted(os.listdir(root)):
-            if not fname.endswith('.docx') or fname.startswith('_'):
+            if not fname.endswith('.docx') or fname.startswith('_') or fname.startswith('~$'):
                 continue
             char = Character(fname[:-5], root)
             self.manifest['characters'].append(char.to_dict())

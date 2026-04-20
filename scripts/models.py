@@ -94,7 +94,8 @@ class Storyline(ContentItem):
         for fname in sorted(os.listdir(folder)):
             if (fname.endswith('.docx')
                     and fname.lower() != 'index.docx'
-                    and not fname.startswith('_')):
+                    and not fname.startswith('_')
+                    and not fname.startswith('~$')):
                 self.chapters.append(Chapter(fname[:-5]))
 
     def to_dict(self) -> dict:
@@ -179,7 +180,8 @@ class Geography(ContentItem):
         for fname in sorted(os.listdir(folder)):
             if (fname.endswith('.docx')
                     and fname.lower() != 'index.docx'
-                    and not fname.startswith('_')):
+                    and not fname.startswith('_')
+                    and not fname.startswith('~$')):
                 self.locations.append(CityLocation(fname[:-5], self.id))
 
     def to_dict(self) -> dict:

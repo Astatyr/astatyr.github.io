@@ -3,9 +3,11 @@ serve.py
 
 # ── Word document source folders ──────────────────────────────────────────────
 # Content is authored here locally and pushed to content/ when ready
+content/_font_backup/
 Worldbuilding-Drafts/
 Writing-Drafts/
 *.tmp
+~$*
 
 # ── Python cache ──────────────────────────────────────────────────────────────
 __pycache__/
