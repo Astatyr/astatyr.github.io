@@ -71,7 +71,20 @@ class Chapter:
 
     def __init__(self, chapter_id: str):
         self.id = chapter_id
-        self.title = to_title(chapter_id)
+        self.title = self._extract_title(chapter_id)
+
+    @staticmethod
+    def _extract_title(chapter_id: str) -> str:
+        """
+        Extract a clean title from the chapter filename id.
+        'Chapter_1-The-Hevrion-Opening' → 'The Hevrion Opening'
+        'Chapter_1'                     → 'Chapter 1' (fallback)
+        """
+        import re
+        cleaned = re.sub(r'^Chapter_\d+[-_]', '', chapter_id, flags=re.IGNORECASE)
+        if cleaned == chapter_id:
+            return to_title(chapter_id)
+        return cleaned.replace('-', ' ').replace('_', ' ')
 
     def to_dict(self) -> dict:
         return {'id': self.id, 'title': self.title}
