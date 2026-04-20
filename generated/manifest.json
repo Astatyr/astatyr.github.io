@@ -2,18 +2,18 @@
   "storylines": [
     {
       "id": "Vrey-Prelude-of-Fear",
-      "title": "Vrey Prelude of Fear",
-      "type": "Storyline",
+      "title": "Vrey - Prelude of Fear",
+      "type": "Daggerheart",
       "status": "In Progress",
-      "description": "",
+      "description": "Campaign Surrounding Hevrion Adventuring Society",
       "chapters": [
         {
-          "id": "Chapter_1",
-          "title": "Chapter 1"
+          "id": "Chapter_1-Trouble-in-the-Port",
+          "title": "Trouble in the Port"
         },
         {
-          "id": "Chapter_2",
-          "title": "Chapter 2"
+          "id": "Chapter_2-Spitzl-Dissapearance-Cases",
+          "title": "Spitzl Dissapearance Cases"
         }
       ]
     }
