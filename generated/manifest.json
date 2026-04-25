@@ -20,6 +20,18 @@
         {
           "id": "Chapter_2-Spitzl-Dissapearance-Cases",
           "title": "Spitzl Dissapearance Cases"
+        },
+        {
+          "id": "Chapter_3-Pirate-Hunting",
+          "title": "Pirate Hunting"
+        },
+        {
+          "id": "Chapter_4-Lugdunum-Tea-Party",
+          "title": "Lugdunum Tea Party"
+        },
+        {
+          "id": "Chapter_5-One-Thousand-Visages.",
+          "title": "One Thousand Visages."
         }
       ]
     }
@@ -107,7 +119,6 @@
     }
   ],
   "featured_characters": [
-    "Emilia-of-Vrey",
-    "Alfred-of-Vrey"
+    "Leonidas-of-Hevrion"
   ]
 }
