@@ -57,6 +57,10 @@ class StorylineIndexRenderer(PageRenderer):
     <div class="section-label">Chapters</div>
     <div id="chapter-list" class="chapter-list"><p class="loading">Loading&hellip;</p></div>
   </div>
+  <div class="wb-section" id="featured-chars-section" style="display:none">
+    <div class="section-label">Characters</div>
+    <div id="featured-chars-grid" class="char-grid"></div>
+  </div>
 </main>"""
         return self._shell(body, ['/assets/js/storyline-page.js'], 'new StorylinePage().init();')
 
@@ -172,3 +176,53 @@ class CityRenderer(PageRenderer):
   </div>
 </main>"""
         return self._shell(body, ['/assets/js/city-page.js'], 'new CityPage().init();')
+
+
+# ── character hub ─────────────────────────────────────────────────────────────
+
+class CharacterHubRenderer(PageRenderer):
+    """Wiki-style hub listing all characters with search/filter."""
+
+    def render(self) -> str:
+        body = """<main style="animation:fadeUp .4s ease both">
+  <a class="back-link" href="/worldbuilding">&larr; Worldbuilding</a>
+  <div class="page-title" style="margin-bottom:0.4rem">Characters</div>
+  <div class="page-meta" style="margin-bottom:2rem">All characters</div>
+  <div class="char-search-bar">
+    <input type="text" id="char-search" placeholder="Search by name or role..."
+           oninput="filterChars(this.value)"/>
+  </div>
+  <div id="char-count" class="page-meta" style="margin:1rem 0"></div>
+  <div id="char-list"></div>
+</main>
+<style>
+.char-search-bar { margin-bottom:0.5rem; }
+.char-search-bar input {
+  width:100%; padding:0.7rem 1rem; border:1px solid var(--border);
+  border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.87rem;
+  background:var(--white); color:var(--ink); outline:none;
+  transition:border-color 0.15s;
+}
+.char-search-bar input:focus { border-color:var(--ink); }
+.char-row {
+  display:flex; align-items:center; gap:0.8rem;
+  padding:0.7rem 0; border-bottom:1px solid var(--border);
+  text-decoration:none; color:var(--ink);
+  transition:background 0.15s; border-radius:6px;
+}
+.char-row:hover { background:var(--hover-bg); padding-left:0.5rem; }
+.char-dot {
+  width:8px; height:8px; border-radius:50%; flex-shrink:0;
+  background:var(--border);
+}
+.char-dot.has-portrait { background:var(--ink); }
+.char-row-name {
+  font-family:'DM Serif Display',serif; font-size:0.95rem; flex:1;
+}
+.char-row-role {
+  font-size:0.75rem; color:var(--muted); font-weight:300;
+}
+.char-hidden { display:none; }
+</style>"""
+        return self._shell(body, ['/assets/js/character-hub-page.js'],
+                           'new CharacterHubPage().init();')

@@ -39,6 +39,7 @@ class GarbageCollector:
             for ch in sl['chapters']:
                 self._expect(f"storylines/{sl['id']}/{ch['id']}.html")
 
+        self._expect('characters/index.html')
         for char in self.manifest['characters']:
             self._expect(f"characters/{char['id']}.html")
 

@@ -9,6 +9,7 @@ from renderers import (
     StorylineIndexRenderer,
     ChapterRenderer,
     CharacterRenderer,
+    CharacterHubRenderer,
     LocationRenderer,
     CityRenderer,
 )
@@ -66,6 +67,11 @@ class ShellGenerator:
     # ── characters ────────────────────────────────────────────────────────────
 
     def _gen_characters(self) -> None:
+        # Generate the character hub index page
+        write_page(
+            os.path.join(self.SHELL_ROOT, 'characters', 'index.html'),
+            CharacterHubRenderer().render()
+        )
         for char in self.manifest['characters']:
             portrait_style = _detect_image_style(
                 'assets/images/characters', char['id']

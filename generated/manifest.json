@@ -6,6 +6,12 @@
       "type": "Daggerheart",
       "status": "In Progress",
       "description": "Campaign Surrounding Hevrion Adventuring Society",
+      "featured_characters": [
+        "Emilia-of-Vrey",
+        "Alfred-of-Vrey",
+        "Leonidas-of-Hevrion",
+        "Mira"
+      ],
       "chapters": [
         {
           "id": "Chapter_1-Trouble-in-the-Port",
@@ -99,5 +105,9 @@
       "image": "",
       "locations": []
     }
+  ],
+  "featured_characters": [
+    "Emilia-of-Vrey",
+    "Alfred-of-Vrey"
   ]
 }

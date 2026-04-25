@@ -100,7 +100,10 @@
     </section>
 
     <section class="wb-section" id="characters">
-      <div class="section-label">🧍 Characters</div>
+      <div class="section-label" style="margin-bottom:0">🧍 Characters</div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1.4rem">
+        <a class="btn-link" href="/worldbuilding/characters/">All characters →</a>
+      </div>
       <div id="characters-list" class="char-grid"></div>
     </section>
 
@@ -140,13 +143,20 @@
       `).join('');
     }
 
-    function renderCharacters(characters) {
+    function renderCharacters(characters, featuredIds) {
       const el = document.getElementById('characters-list');
-      if (!characters || characters.length === 0) {
-        el.innerHTML = '<p class="empty-note">No characters yet — add .docx files inside content/characters/.</p>';
+      if (!featuredIds || !featuredIds.length) {
+        el.innerHTML = '<p class="empty-note">No featured characters yet — add <code>featured_characters: Name-id, Name-id</code> to content/_meta.txt.</p>';
         return;
       }
-      el.innerHTML = characters.map(c => `
+      const charMap = {};
+      (characters || []).forEach(c => charMap[c.id] = c);
+      const featured = featuredIds.map(id => charMap[id]).filter(Boolean);
+      if (!featured.length) {
+        el.innerHTML = '<p class="empty-note">Featured character ids not found in manifest — check content/_meta.txt.</p>';
+        return;
+      }
+      el.innerHTML = featured.map(c => `
         <a class="char-card" href="/worldbuilding/characters/${c.id}.html">
           <div class="char-img" style="${c.image ? 'background-image: url(' + c.image + ')' : ''}"></div>
           <div class="char-info">
@@ -181,7 +191,7 @@
         return;
       }
       renderStorylines(data.storylines);
-      renderCharacters(data.characters);
+      renderCharacters(data.characters, data.featured_characters);
       renderGeography(data.geography);
     });
 

@@ -43,6 +43,28 @@ class StorylinePage extends PageController {
         </a>`).join('');
     }
 
+    // Featured characters for this storyline
+    if (sl.featured_characters && sl.featured_characters.length) {
+      const charSection = document.getElementById('featured-chars-section');
+      const charGrid = document.getElementById('featured-chars-grid');
+      if (charSection) charSection.style.display = 'block';
+      if (charGrid) {
+        const charMap = {};
+        manifest.characters.forEach(c => charMap[c.id] = c);
+        charGrid.innerHTML = sl.featured_characters
+          .map(id => charMap[id])
+          .filter(Boolean)
+          .map(c => `
+            <a class="char-card" href="/worldbuilding/characters/${c.id}.html">
+              <div class="char-img" style="${c.image ? 'background-image: url(' + c.image + ')' : ''}"></div>
+              <div class="char-info">
+                <div class="char-name">${c.title}</div>
+                <div class="char-role">${c.role || ''}</div>
+              </div>
+            </a>`).join('');
+      }
+    }
+
     // Overview content from index.docx
     await ContentLoader.load(
       `/generated/storylines/${slId}/index.html`,

@@ -32,6 +32,14 @@ def read_meta(folder: str) -> dict:
     return meta
 
 
+def parse_featured_characters(meta: dict) -> list[str]:
+    """Parse featured_characters from meta dict into a list of ids."""
+    raw = meta.get('featured_characters', '')
+    if not raw:
+        return []
+    return [c.strip() for c in raw.split(',') if c.strip()]
+
+
 def detect_image(directory: str, basename: str) -> str:
     """
     Look for an image matching basename in directory.
@@ -100,6 +108,7 @@ class Storyline(ContentItem):
         self.type = meta.get('type', 'Storyline')
         self.status = meta.get('status', 'In Progress')
         self.description = meta.get('description', '')
+        self.featured_characters = parse_featured_characters(meta)
         self.chapters: list[Chapter] = []
         self._scan_chapters(folder)
 
@@ -118,6 +127,7 @@ class Storyline(ContentItem):
             'type': self.type,
             'status': self.status,
             'description': self.description,
+            'featured_characters': self.featured_characters,
             'chapters': [c.to_dict() for c in self.chapters],
         }
 

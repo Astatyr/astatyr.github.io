@@ -4,7 +4,7 @@ manifest_builder.py — Scans content/ folders and builds the manifest.json.
 
 import os
 import json
-from models import Storyline, Character, Geography
+from models import Storyline, Character, Geography, read_meta, parse_featured_characters
 
 
 class ManifestBuilder:
@@ -21,15 +21,24 @@ class ManifestBuilder:
             'storylines': [],
             'characters': [],
             'geography': [],
+            'featured_characters': [],  # global, from content/_meta.txt
         }
 
     def build(self) -> dict:
         """Scan all content, build manifest, write to disk. Returns manifest dict."""
+        self._scan_global_meta()
         self._scan_storylines()
         self._scan_characters()
         self._scan_geography()
         self._write()
         return self.manifest
+
+    def _scan_global_meta(self) -> None:
+        """Read content/_meta.txt for global featured_characters."""
+        meta = read_meta(self.CONTENT_ROOT)
+        self.manifest['featured_characters'] = parse_featured_characters(meta)
+        if self.manifest['featured_characters']:
+            print(f"  Global featured: {', '.join(self.manifest['featured_characters'])}")
 
     # ── scanners ─────────────────────────────────────────────────────────────
 
