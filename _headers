@@ -2,13 +2,29 @@
 /assets/images/*
   Cache-Control: public, max-age=2592000
 
-/generated/media/*
-  Cache-Control: public, max-age=2592000
+# Cache shared CSS/JS for a short time — long enough to help repeat visits,
+# short enough that a push doesn't leave visitors on stale assets for long
+/assets/css/*
+  Cache-Control: public, max-age=600
+/assets/js/*
+  Cache-Control: public, max-age=600
 
-# Cache generated HTML for a short time — it changes when you push
-/generated/*
-  Cache-Control: public, max-age=300
-
-# Don't cache manifest.json — needs to be fresh
-/generated/manifest.json
-  Cache-Control: no-cache
+# Security headers for everything served as static assets by this Pages
+# project. Note: this file does NOT apply to Pages Functions responses
+# (see functions/worldbuilding/[[path]].js and functions/api/poems.js,
+# which set their own headers) — that's a Cloudflare Pages limitation, not
+# an oversight.
+#
+# One rule, no per-path CSP carve-outs: Cloudflare merges _headers rules
+# from every matching path rather than letting a more specific one win, so
+# two different Content-Security-Policy values on overlapping paths get
+# sent and enforced together (the stricter one always wins regardless of
+# which was "meant" to apply). Anything that needs to reach a third-party
+# origin goes through a same-origin Pages Function instead of getting a
+# CSP exception — see functions/api/poems.js for the pattern.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=()
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
