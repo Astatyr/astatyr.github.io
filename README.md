@@ -56,5 +56,4 @@ Page soon™ to be added.
 
 ## 📫 Contact
 GitHub: `https://github.com/Astatyr`  
-Email: `justin.halim20@gmail.com`  
-Linkedin: `https://www.linkedin.com/in/justin-adrian-halim/`  
+See the [contact section](https://astatyr.github.io/#contact) on the site for email.  

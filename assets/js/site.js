@@ -42,6 +42,15 @@ export class Navigation {
         const div = document.createElement('div');
         div.className = 'nav-footer';
         div.textContent = item.text;
+        if (item.linkText && item.linkHref) {
+          div.append(' · ');
+          const a = document.createElement('a');
+          a.href = item.linkHref;
+          a.target = '_blank';
+          a.rel = 'license noopener';
+          a.textContent = item.linkText;
+          div.appendChild(a);
+        }
         return div;
       }
       case 'slot': {

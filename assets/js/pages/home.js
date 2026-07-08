@@ -8,7 +8,7 @@ new Navigation(document.getElementById('site-nav'), [
   { icon: '✍️', label: 'Writing', href: '#writing', navId: 'writing' },
   { type: 'divider' },
   { icon: '📫', label: 'Contact', href: '#contact', navId: 'contact' },
-  { type: 'footer', text: '© 2025 Justin Adrian Halim' },
+  { type: 'footer', text: '© 2026 Astatyr', linkText: 'CC BY-NC-ND 4.0', linkHref: 'https://creativecommons.org/licenses/by-nc-nd/4.0/' },
 ]).render();
 
 new ScrollSpy({ threshold: 0.3 }).observeByNavId();
