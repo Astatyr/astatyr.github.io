@@ -20,7 +20,19 @@ class GithubPagesProxy {
 
   async handle(request) {
     const url = new URL(request.url);
-    const targetUrl = this._resolveTargetUrl(url);
+
+    // The worldbuilding repo's pages use relative fetch()/href calls (e.g.
+    // fetch('generated/manifest.json')), which only resolve against
+    // /worldbuilding/ if the browser's address bar actually ends in '/'.
+    // Serving directory-style paths without redirecting first means those
+    // relative calls silently resolve against the domain root instead.
+    if (this._needsTrailingSlash(url.pathname)) {
+      const redirectUrl = new URL(url);
+      redirectUrl.pathname += '/';
+      return Response.redirect(redirectUrl.toString(), 301);
+    }
+
+    const targetUrl = `https://${this.originHost}${url.pathname}${url.search}`;
 
     const originHeaders = new Headers(request.headers);
     originHeaders.delete('host');
@@ -34,18 +46,22 @@ class GithubPagesProxy {
     return this._buildResponse(originResponse, url);
   }
 
-  _resolveTargetUrl(url) {
-    let pathname = url.pathname;
+  _needsTrailingSlash(pathname) {
     const lastSegment = pathname.split('/').pop();
-    // GitHub Pages needs a trailing slash on directory-style paths to serve their index.html
-    if (!pathname.endsWith('/') && !lastSegment.includes('.')) {
-      pathname += '/';
-    }
-    return `https://${this.originHost}${pathname}${url.search}`;
+    return !pathname.endsWith('/') && !lastSegment.includes('.');
   }
 
   _buildResponse(originResponse, requestUrl) {
     const headers = new Headers(originResponse.headers);
+
+    // fetch() already transparently gunzips the origin response — the body
+    // we're forwarding is plain bytes, but the original Content-Encoding
+    // and Content-Length headers still describe the *compressed* version.
+    // Forwarding them unchanged tells the browser to gunzip already-decoded
+    // data, which fails silently inside fetch() (curl doesn't catch this —
+    // it only decodes when asked, so `curl -I` looks fine either way).
+    headers.delete('content-encoding');
+    headers.delete('content-length');
 
     // Don't let a GitHub Pages redirect leak astatyr.github.io into the address bar
     const location = headers.get('location');
